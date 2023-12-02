@@ -5,7 +5,7 @@ Very simple round-robin method load balancer docker image
 ### Usage
 
 ```Dockerfile
-FROM xcc-lb:latest
+FROM xcodeclazz-load-balancer:latest
 COPY config.json /app/dist/config.json
 
 ...
