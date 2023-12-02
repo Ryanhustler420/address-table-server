@@ -1,7 +1,7 @@
 {
   "servers": [
-    { "name": "https://srv1.onrender.com", "capacity": 20 },
-    { "name": "https://srv2.onrender.com", "capacity": 20 },
-    { "name": "https://srv3.onrender.com", "capacity": 15 }
+    { "name": "https://example1.com", "capacity": 2 },
+    { "name": "https://example2.com", "capacity": 1 },
+    { "name": "https://example3.com", "capacity": 0 }
   ]
 }
