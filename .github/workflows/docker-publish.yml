@@ -1,0 +1,76 @@
+name: Docker Publish
+env: { PORT: 3000, Group: Blank }
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: 🧪 Test
+        run: npm run test:ci
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: ⚒️ Build
+        run: npm run build
+  dockerize:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies for server
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: ⚒️ Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
+      - name: 🏡 Run the docker image locally
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 💤 Sleep for 30 seconds
+        run: sleep 30
+      - name: 📞 Calling the api
+        run: curl http://localhost:${{ env.PORT }}
+  uploading-docker-image:
+    needs: [dockerize]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies for server
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: ⚒️ Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
+      - name: 🏡 Run the docker image locally
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 💤 Sleep for 30 seconds
+        run: sleep 30
+      - name: 📞 Calling the api
+        run: curl http://localhost:${{ env.PORT }}
+      # Docker push begins
+      - name: 🚪 Docker login
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: ➕ Push image to docker
+        run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}

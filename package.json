@@ -1,0 +1,52 @@
+{
+  "name": "xcodeclazz-load-balancer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:ci": "jest",
+    "test": "jest --watchAll --no-cache --detectOpenHandles",
+    "watch": "ts-node-dev --poll --respawn src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cookie-session": "^2.0.44",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@xcc.com/xcc-celebrate": "^15.0.8",
+    "@xcc.com/xcc-common": "^1.0.76",
+    "axios": "^1.4.0",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^20.2.5",
+    "@types/supertest": "^2.0.12",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  }
+}

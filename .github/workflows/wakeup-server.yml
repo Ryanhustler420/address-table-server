@@ -1,0 +1,12 @@
+name: Wakeup Server (Cron)
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "*/12 * * * *" # Runs the job every 12 minutes
+jobs:
+  request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calling the host
+        run: |
+          curl ${{ secrets.RENDER_SERVER_HOST_URL }}

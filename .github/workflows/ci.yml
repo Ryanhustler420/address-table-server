@@ -1,0 +1,51 @@
+name: CI
+env: { PORT: 3000, Group: CI }
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "feature-*"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Depe$ndencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: 🧪 Test
+        run: npm run test:ci
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: ⚒️ Build
+        run: npm run build
+  dockerize:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v4
+      - name: ⚙️ Load & Cache Dependencies for server
+        uses: ./.github/actions/cached-deps
+        with:
+          prefix: .
+      - name: ⚒️ Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
+      - name: 🏡 Run the docker image locally
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 💤 Sleep for 30 seconds
+        run: sleep 30
+      - name: 📞 Calling the api
+        run: curl http://localhost:${{ env.PORT }}
