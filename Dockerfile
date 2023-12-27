@@ -1,7 +1,9 @@
 FROM node:18-alpine
 
 # Please dont change this here, You can change this via outside
-ENV ENV=production 
+ARG NODE_ENV=production
+
+ENV NODE_ENV=${NODE_ENV}
 
 # Set environment variables
 ENV JWT_KEY=something
@@ -14,5 +16,8 @@ COPY tsconfig.json .
 RUN npm install
 
 COPY . .
+
+RUN npm run build
+
 EXPOSE $PORT
 CMD [ "npm", "start" ]

@@ -4,13 +4,9 @@ import { json } from "body-parser";
 
 import cookieSession from "cookie-session";
 import { NODE_ENV } from "./env";
-import cors from 'cors';
+import cors from "cors";
 
-import { errorHandler, NotFoundError } from "@xcc.com/xcc-common";
-import { celebrate_custome_errors } from "@xcc.com/xcc-celebrate";
-
-import { healthChecksRouter } from "./routes/health-checks";
-import { showPostsRouter } from "./routes/show-posts";
+import { refreshAddressTableRouter } from "./routes/refresh-address-table";
 
 const app = express();
 
@@ -24,13 +20,12 @@ app.use(
   })
 );
 
-app.use(showPostsRouter);
-app.use(healthChecksRouter);
+app.use(refreshAddressTableRouter);
 
 app.all("*", async (req, res) => {
-  throw new NotFoundError();
+  res.json({
+    message: "Please don't invoke me, it hurts",
+  });
 });
-app.use(celebrate_custome_errors());
-app.use(errorHandler);
 
 export { app };

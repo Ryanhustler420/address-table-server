@@ -1,11 +1,11 @@
-# xCodeClazz Load Balancer
+# Address Table Server
 
 Very simple round-robin method load balancer docker image
 
 ### Usage
 
 ```Dockerfile
-FROM xcodeclazz-load-balancer:latest
+FROM address-table-server:latest
 COPY config.json /app/dist/config.json
 
 ...
