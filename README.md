@@ -49,10 +49,10 @@ Create these branches: `master`, `stage`, `production`
 
 > Once you have docker image on dockerhub
 
-- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_APP_SERVICE_ID : `null`
-- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_APP_SERVICE_ID : `null`
-- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_PROFILE_AUTH_API_TOKEN : `null`
-- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_PROFILE_AUTH_API_TOKEN : `null`
+- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_APP_SERVICE_ID : `srv-cmbs6fn109ks73aep880`
+- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_APP_SERVICE_ID : `srv-cmbs82mn7f5s7392jb3g`
+- WF\_<span style="color:green;">**RENDER**</span>\_STAGE_PROFILE_AUTH_API_TOKEN : `rnd_kxFLhZAeeHaIUVquxx2KvbxWW94C`
+- WF\_<span style="color:green;">**RENDER**</span>\_PRODUCTION_PROFILE_AUTH_API_TOKEN : `rnd_BLSL3BZWyZAQfniYhpbZixv0xm6L`
 
 ## Keep in mind
 
