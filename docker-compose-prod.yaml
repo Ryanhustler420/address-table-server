@@ -2,10 +2,10 @@ version: '3.8'
 services:
   address-table-server:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       context: .
       args:
-        - NODE_ENV=development
+        - NODE_ENV=production
         - ADMIN_PASSWORD=something
         - MONGO_URI=mongodb://mongodb:27017
         - SLACK_WEBHOOK_URL=https://something

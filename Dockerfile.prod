@@ -1,6 +1,6 @@
 FROM node:20
 
-ARG NODE_ENV=development
+ARG NODE_ENV=production
 ARG ADMIN_PASSWORD=something
 ARG DATABASE=address-table-server
 ARG MONGO_URI=mongodb://mongodb:27017
@@ -27,9 +27,11 @@ RUN curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.
     && tar xzf node_exporter-1.2.2.linux-amd64.tar.gz \
     && cp node_exporter-1.2.2.linux-amd64/node_exporter /usr/local/bin/ \
     && rm -rf node_exporter-1.2.2.linux-amd64 node_exporter-1.2.2.linux-amd64.tar.gz
-RUN npm install
+RUN npm install --only=prod
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE ${PORT}
-CMD [ "npm", "run", "watch" ]
+CMD [ "npm", "start" ]

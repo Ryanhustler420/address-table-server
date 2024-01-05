@@ -1,9 +1,21 @@
-name: Docker Publish
-env: { STAGE_PORT: 3001, CONTAINER_PORT: 3000, PRODUCTION_PORT: 3002 }
+name: Production
+env: { CONTAINER_PORT: 3000, PRODUCTION_PORT: 3001 }
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [production]
+    types: [closed]
 jobs:
+  merge_check:
+    runs-on: ubuntu-latest
+    outputs:
+      merged: ${{ github.event.pull_request.merged }}
+    steps:
+      - name: Check Pull Request Merge
+        run: echo "Ran the code"
   server-test:
+    needs: merge_check
+    if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
@@ -22,29 +34,14 @@ jobs:
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
-      - name: 🐟 Build stage image
-        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_STAGE_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
       - name: 🐟 Build production image
         run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_PRODUCTION_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}"
-      - name: 🏡 Run stage image
-        run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 🏡 Run production image
         run: docker run -d -p ${{ env.PRODUCTION_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
-      - name: 📞 Calling stage api
-        run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
       - name: 📞 Calling production api
         run: curl http://localhost:${{ env.PRODUCTION_PORT }}/api/currentuser
-      - name: 2️⃣ Docker stage account login
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env:
-          DOCKER_USERNAME: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_PASSWORD }}
-      - name: 🌩️ Push stage image to docker hub
-        run: docker push ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
-      - name: 2️⃣ Docker stage account logout
-        run: docker logout
       - name: 1️⃣ Docker production account login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
@@ -54,8 +51,14 @@ jobs:
         run: docker push ${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}
       - name: 1️⃣ Docker production account logout
         run: docker logout
+      - name: ⚠️ Production Deploy Trigger
+        id: render-production-deployer
+        uses: OneHox/render-deploy-api@v1.0.0
+        with:
+          serviceId: ${{ secrets.WF_RENDER_PRODUCTION_APP_SERVICE_ID }}
+          bearer: ${{ secrets.WF_RENDER_PRODUCTION_PROFILE_AUTH_API_TOKEN }}
       - name: 💬 Sending Notification
         uses: gh-actions-projects/slack-messenger@v1.0.0
         with:
           webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
-          payload: ✅ Docker images published!
+          payload: ✅ Application Productioned!

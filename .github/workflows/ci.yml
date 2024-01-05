@@ -1,24 +1,10 @@
 name: CI
-env: { PORT: 3000, Group: CI }
+env: { STAGE_PORT: 3001, CONTAINER_PORT: 3000 }
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "feature-*"
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Depe$ndencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: 🧪 Test
-        run: npm run test:ci
-  build:
-    needs: [test]
+  server-test:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
@@ -27,25 +13,36 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: ⚒️ Build
-        run: npm run build
+      - name: 🧪 Test Auth Service
+        run: npm run test-auth:ci
+      - name: 🧪 Test Target Service
+        run: npm run test-target:ci
   dockerize:
-    needs: [build]
+    needs: [server-test]
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: toor
+    env:
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 # mongodb, if ports not mentioned
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 🐟 Build stage image
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ env.MONGODB_CLUSTER_ADDRESS }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
+      - name: 🏡 Run stage image
+        run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
+      - name: 📞 Calling stage api
+        run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
+      - name: 💬 Sending Notification
+        uses: gh-actions-projects/slack-messenger@v1.0.0
+        with:
+          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
+          payload: ✅ Working!, Now Stage This 👉 Link!!!

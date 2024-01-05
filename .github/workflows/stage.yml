@@ -1,5 +1,5 @@
 name: Stage
-env: { PORT: 3000, Group: Stage }
+env: { CONTAINER_PORT: 3000, STAGE_PORT: 3001 }
 on:
   workflow_dispatch:
   pull_request:
@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Check Pull Request Merge
         run: echo "Ran the code"
-  test:
-    needs: [merge_check]
+  server-test:
+    needs: merge_check
     if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
@@ -24,71 +24,41 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: 🧪 Test
-        run: npm run test:ci
-  build:
-    needs: [test]
+      - name: 🧪 Test Auth Service
+        run: npm run test-auth:ci
+      - name: 🧪 Test Target Service
+        run: npm run test-target:ci
+  dockerize-and-publish:
+    needs: [server-test]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build
-        run: npm run build
-  dockerize:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: 🐟 Build stage image
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_STAGE_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
+      - name: 🏡 Run stage image
+        run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
-  uploading-docker-image:
-    needs: [dockerize]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Get the code
-        uses: actions/checkout@v4
-      - name: ⚙️ Load & Cache Dependencies for server
-        uses: ./.github/actions/cached-deps
-        with:
-          prefix: .
-      - name: ⚒️ Build Server
-        run: npm run build
-      - name: 🐟 Building docker image
-        run: docker build -t "${{ secrets.DOCKER_IMAGE_NAME }}" .
-      - name: 🏡 Run the docker image locally
-        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: 💤 Sleep for 30 seconds
-        run: sleep 30
-      - name: 📞 Calling the api
-        run: curl http://localhost:${{ env.PORT }}
-      # Docker push begins
-      - name: 🚪 Docker login
+      - name: 📞 Calling stage api
+        run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
+      - name: 2️⃣ Docker stage account login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - name: ➕ Push image to docker
-        run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
-      - name: ⚠️ Deploy Trigger
-        id: render-deployer
+          DOCKER_USERNAME: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.WF_DOCKER_STAGE_ACCOUNT_PASSWORD }}
+      - name: 🌩️ Push stage image to docker hub
+        run: docker push ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
+      - name: 2️⃣ Docker stage account logout
+        run: docker logout
+      - name: ⚠️ Stage Deploy Trigger
+        id: render-stage-deployer
         uses: OneHox/render-deploy-api@v1.0.0
         with:
-          serviceId: ${{ secrets.RENDER_APP_SERVICE_ID }}
-          bearer: ${{ secrets.RENDER_PROFILE_AUTH_API_TOKEN }}
+          serviceId: ${{ secrets.WF_RENDER_STAGE_APP_SERVICE_ID }}
+          bearer: ${{ secrets.WF_RENDER_STAGE_PROFILE_AUTH_API_TOKEN }}
+      - name: 💬 Sending Notification
+        uses: gh-actions-projects/slack-messenger@v1.0.0
+        with:
+          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
+          payload: ✅ Application Staged!

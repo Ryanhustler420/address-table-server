@@ -1,0 +1,15 @@
+name: Refresh Stage
+on:
+  workflow_dispatch:
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⚠️ Stage Deploy Trigger
+        id: render-stage-deployer
+        uses: OneHox/render-deploy-api@v1.0.0
+        with:
+          serviceId: ${{ secrets.WF_RENDER_STAGE_APP_SERVICE_ID }}
+          bearer: ${{ secrets.WF_RENDER_STAGE_PROFILE_AUTH_API_TOKEN }}
+      - name: 💬 Message
+        run: echo "${{ steps.render-stage-deployer.outcome.response }}"
