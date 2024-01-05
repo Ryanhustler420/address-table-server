@@ -26,8 +26,8 @@ jobs:
           prefix: .
       - name: 🧪 Test Auth Service
         run: npm run test-auth:ci
-      - name: 🧪 Test Target Service
-        run: npm run test-target:ci
+      - name: 🧪 Test Render Service
+        run: npm run test-render:ci
   dockerize-and-publish:
     needs: [server-test]
     runs-on: ubuntu-latest

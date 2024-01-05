@@ -18,10 +18,10 @@ import { authUserLogoutRouter } from "./routes/auth/user-logout";
 import { authUserLoginRouter } from "./routes/auth/user-login";
 import { authMetricsRouter } from "./routes/auth/metrics";
 
-import { targetShowRouter } from "./routes/target/show-targets";
-import { targetCreateRouter } from "./routes/target/create-target";
-import { targetPingRouter } from "./routes/target/ping-containers";
-import { targetRefreshRouter } from "./routes/target/refresh-containers";
+import { renderShowRouter } from "./routes/render/show-renders";
+import { renderCreateRouter } from "./routes/render/create-render";
+import { renderPingRouter } from "./routes/render/ping-renders";
+import { renderRefreshRouter } from "./routes/render/refresh-renders";
 
 const app = express();
 app.use(json());
@@ -42,10 +42,10 @@ app.use(authUserAdminMakeRouter);
 app.use(authDropCollectionsRouter);
 app.use(authMetricsRouter);
 
-app.use(targetShowRouter);
-app.use(targetCreateRouter);
-app.use(targetPingRouter);
-app.use(targetRefreshRouter);
+app.use(renderShowRouter);
+app.use(renderCreateRouter);
+app.use(renderPingRouter);
+app.use(renderRefreshRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

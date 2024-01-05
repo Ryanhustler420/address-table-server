@@ -8,9 +8,9 @@
     "start": "node dist/index.js",
     "watch": "ts-node-dev --poll --respawn src/index.ts",
     "test-auth:ci": "jest --maxWorkers=8 --testTimeout=60000 --testPathPattern='src/routes/auth/__test__'",
-    "test-target:ci": "jest --maxWorkers=8 --testTimeout=60000 --testPathPattern='src/routes/target/__test__'",
+    "test-render:ci": "jest --maxWorkers=8 --testTimeout=60000 --testPathPattern='src/routes/render/__test__'",
     "test-auth": "jest --maxWorkers=8 --testTimeout=60000 --watchAll --no-cache --detectOpenHandles --testPathPattern='src/routes/auth/__test__'",
-    "test-target": "jest --maxWorkers=8 --testTimeout=60000 --watchAll --no-cache --detectOpenHandles --testPathPattern='src/routes/target/__test__'"
+    "test-render": "jest --maxWorkers=8 --testTimeout=60000 --watchAll --no-cache --detectOpenHandles --testPathPattern='src/routes/render/__test__'"
   },
   "jest": {
     "preset": "ts-jest",
