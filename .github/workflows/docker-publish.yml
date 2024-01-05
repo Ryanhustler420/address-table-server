@@ -55,7 +55,11 @@ jobs:
       - name: 1️⃣ Docker production account logout
         run: docker logout
       - name: 💬 Sending Notification
-        uses: gh-actions-projects/slack-messenger@v1.0.0
+        uses: stegzilla/discord-notify@v4
         with:
-          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
-          payload: ✅ Docker images published!
+          title: dockerize
+          include_image: true
+          username: ${{ github.actor }}
+          message: ✅ Docker images published!
+          webhook_url: ${{ secrets.WF_DISCORD_WEBHOOK_URL }}
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

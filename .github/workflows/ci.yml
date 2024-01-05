@@ -42,7 +42,11 @@ jobs:
       - name: 📞 Calling stage api
         run: curl http://localhost:${{ env.STAGE_PORT }}/api/currentuser
       - name: 💬 Sending Notification
-        uses: gh-actions-projects/slack-messenger@v1.0.0
+        uses: stegzilla/discord-notify@v4
         with:
-          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
-          payload: ✅ Working!, Now Stage This 👉 Link!!!
+          title: dockerize
+          include_image: true
+          username: ${{ github.actor }}
+          message: ✅ Working!, Now Stage This 👉 Link!!!
+          webhook_url: ${{ secrets.WF_DISCORD_WEBHOOK_URL }}
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png

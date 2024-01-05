@@ -8,7 +8,6 @@ services:
         - NODE_ENV=production
         - ADMIN_PASSWORD=something
         - MONGO_URI=mongodb://mongodb:27017
-        - SLACK_WEBHOOK_URL=https://something
     restart: always
     ports:
       - "3000:3000"

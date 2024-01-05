@@ -33,7 +33,7 @@ Create these branches: `master`, `stage`, `production`
 
 > You can pre create these, since these details are not tighly coupled with this repository
 
-- WF\_<span style="color:lightblue;">**SLACK**</span>\_WEBHOOK_URL : `https://hooks.slack.com/services/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`
+- WF\_<span style="color:lightblue;">**DISCORD**</span>\_WEBHOOK_URL : `https://discord.com/api/webhooks/1192732245396566046/fcnrRcCydgtgTAfDSUf1g2X1Qe01jQP7ibz4BEQe9vbnPOGK10qvxmvKFRRPNRTgmsEW`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_USERNAME : `carolinaalbertus`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_ACCOUNT_PASSWORD : `Phpmyadmin920@`
 - WF\_<span style="color:red;">**DOCKER**</span>\_STAGE_IMAGE_NAME : `carolinaalbertus/address-table-server-stage`

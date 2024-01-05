@@ -58,7 +58,11 @@ jobs:
           serviceId: ${{ secrets.WF_RENDER_STAGE_APP_SERVICE_ID }}
           bearer: ${{ secrets.WF_RENDER_STAGE_PROFILE_AUTH_API_TOKEN }}
       - name: 💬 Sending Notification
-        uses: gh-actions-projects/slack-messenger@v1.0.0
+        uses: stegzilla/discord-notify@v4
         with:
-          webhook_url: ${{ secrets.WF_SLACK_WEBHOOK_URL }}
-          payload: ✅ Application Staged!
+          title: dockerize
+          include_image: true
+          username: ${{ github.actor }}
+          message: ✅ Application Staged!
+          webhook_url: ${{ secrets.WF_DISCORD_WEBHOOK_URL }}
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
