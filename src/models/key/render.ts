@@ -1,15 +1,7 @@
 import mongoose from "mongoose";
 import { Password } from "../../services/password";
+import { RenderAttrs } from "@com.xcodeclazz/address-table-server";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
-
-export interface RenderAttrs {
-  url: string;
-  email: string;
-  capacity: number;
-  serviceId: string;
-  authToken: string;
-  imageName: string;
-}
 
 export interface RenderMongoDocument extends mongoose.Document, RenderAttrs {
   version: number;
@@ -61,6 +53,7 @@ const renderSchema = new mongoose.Schema(
   }
 );
 
+renderSchema.index({ capacity: 1 });
 renderSchema.set("versionKey", "version");
 renderSchema.plugin(updateIfCurrentPlugin);
 
