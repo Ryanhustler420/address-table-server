@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
+          caching: "false"
       - name: 🧪 Test Render Service
         run: npm run test-render:ci
       - name: 🧪 Test Auth Service
