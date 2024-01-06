@@ -13,10 +13,10 @@ jobs:
         uses: ./.github/actions/cached-deps
         with:
           prefix: .
-      - name: 🧪 Test Auth Service
-        run: npm run test-auth:ci
       - name: 🧪 Test Render Service
         run: npm run test-render:ci
+      - name: 🧪 Test Auth Service
+        run: npm run test-auth:ci
   dockerize:
     needs: [server-test]
     runs-on: ubuntu-latest
