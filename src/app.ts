@@ -1,3 +1,4 @@
+import path from "path";
 import "express-async-errors";
 import express from "express";
 import { json } from "body-parser";
@@ -28,6 +29,7 @@ app.use(json());
 app.set("trust proxy", true);
 app.use(cors({ origin: "*", exposedHeaders: ["base64"] }));
 app.use(cookieSession(cookieConfig));
+if (process.env.NODE_ENV === "production") app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
 ////////////
 // WARNING: PLEASE DON'T CHANGE THE ROUTE ORDER
@@ -46,6 +48,12 @@ app.use(renderShowRouter);
 app.use(renderCreateRouter);
 app.use(renderPingRouter);
 app.use(renderRefreshRouter);
+
+app.get("/", (req, res) => {
+  if (process.env.NODE_ENV === "production") {
+    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+  } else res.json({ message: "NO UI FOUND" });
+});
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

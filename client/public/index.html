@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="light dark" />
+
+    <meta name="author" content="Gourav Gupta">
+    <meta name="keywords" content="xCodeClazz xCodeClazz-Address-Table">
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- <meta name="google-site-verification" content=""> -->
+
+    <meta name="description" content="Address table server build by xcodeclazz for it's internal use case." />
+
+    <meta itemprop="name" content="Project">
+    <meta itemprop="image" content="%PUBLIC_URL%/assets/icon/favicon.ico">
+    <meta itemprop="description"
+        content="Address table server build by xcodeclazz for it's internal use case.">
+    
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Address Table Server">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://ats.xcodeclazz.com">
+    <meta property="og:title"
+        content="Address table server build by xcodeclazz for it's internal use case.">
+    <meta property="og:image" content="%PUBLIC_URL%/assets/icon/favicon.ico">
+    <meta property="og:description"
+        content="Address table server build by xcodeclazz for it's internal use case.">
+    <meta property="og:site_name" content="Address table server">
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" type="image/x-icon" href="%PUBLIC_URL%/assets/icon/favicon.ico" />
+    <title>xCodeClazz | Address Table Server</title>
+
+    <base href="/" />
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" type="image/ico" href="%PUBLIC_URL%/assets/icon/favicon.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      ;(function () {
+        var src = '//cdn.jsdelivr.net/npm/eruda';
+        if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
+        document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+        document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+      })();
+      let isTouchScreen = false;
+      setInterval(() => isTouchScreen = 'ontouchstart' in document.documentElement, 100);
+    </script>
+    <script defer src="./js/utils.js"></script>
+  </body>
+
+</html>

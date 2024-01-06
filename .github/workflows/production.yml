@@ -1,5 +1,5 @@
 name: Production
-env: { CONTAINER_PORT: 3000, PRODUCTION_PORT: 3001 }
+env: { CONTAINER_PORT: 8080, PRODUCTION_PORT: 8081 }
 on:
   workflow_dispatch:
   pull_request:

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Remove this like, change this file name from robots.sample.txt -> robots.txt

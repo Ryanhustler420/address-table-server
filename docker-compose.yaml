@@ -1,20 +1,36 @@
 version: '3.8'
 services:
-  address-table-server:
+  client:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+    volumes:
+      - /app/node_modules
+      - /app/build
+      - ./client:/app
+    depends_on:
+      - server
+
+  server:
     build:
       dockerfile: Dockerfile
       context: .
       args:
         - NODE_ENV=development
         - ADMIN_PASSWORD=something
+        - DATABASE=address-table-server
         - MONGO_URI=mongodb://mongodb:27017
     restart: always
     ports:
-      - "3000:3000"
+      - "8080:8080"
     environment:
-      - DATABASE=address-table-server
       - JWT_KEY=something
-      - PORT=3000
+      - PORT=8080
     volumes:
       - /app/node_modules
       - /app/dist

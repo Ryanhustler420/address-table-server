@@ -13,7 +13,7 @@ ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
 ENV MONGO_URI=${MONGO_URI}
 ENV DATABASE=${DATABASE}
 ENV JWT_KEY=something
-ENV PORT=3000
+ENV PORT=8080
 
 WORKDIR /app
 COPY package*.json .
@@ -29,6 +29,8 @@ RUN npm install --only=prod
 
 COPY . .
 
+RUN npm install --force --prefix client
+RUN npm run build --prefix client
 RUN npm run build
 
 EXPOSE ${PORT}
