@@ -24,9 +24,9 @@ jobs:
       - name: ⬇️ Get the code
         uses: actions/checkout@v4
       - name: 🐟 Build stage image
-        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_STAGE_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}"
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_STAGE_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_STAGE_DATABASE_NAME }}" --build-arg ADMIN_PASSWORD="${{ secrets.WF_ADMIN_PASSWORD_STAGE }}"
       - name: 🐟 Build production image
-        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_PRODUCTION_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}"
+        run: docker build -f Dockerfile.prod -t "${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}" . --build-arg MONGO_URI="${{ secrets.WF_MONGODB_PRODUCTION_URI }}" --build-arg NODE_ENV="production" --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}" --build-arg ADMIN_PASSWORD="${{ secrets.WF_ADMIN_PASSWORD_PRODUCTION }}"
       - name: 🏡 Run stage image
         run: docker run -d -p ${{ env.STAGE_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_STAGE_IMAGE_NAME }}
       - name: 🏡 Run production image

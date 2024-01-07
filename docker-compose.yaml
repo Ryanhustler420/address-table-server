@@ -1,6 +1,6 @@
-version: '3.8'
+version: '3.9'
 services:
-  client:
+  address-table-server-frontend:
     build:
       context: client
       dockerfile: Dockerfile
@@ -14,17 +14,17 @@ services:
       - /app/build
       - ./client:/app
     depends_on:
-      - server
+      - address-table-server-backend
 
-  server:
+  address-table-server-backend:
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
       args:
         - NODE_ENV=development
         - ADMIN_PASSWORD=something
         - DATABASE=address-table-server
-        - MONGO_URI=mongodb://mongodb:27017
+        - MONGO_URI=mongodb://address-table-server-mongodb:27017
     restart: always
     ports:
       - "8080:8080"
@@ -36,16 +36,15 @@ services:
       - /app/dist
       - .:/app
     depends_on:
-      - mongodb
+      - address-table-server-mongodb
 
-  mongodb:
+  address-table-server-mongodb:
     image: mongo
-    hostname: mongodb
     restart: unless-stopped
     volumes:
-      - address-table-server:/data/db/address-table-server
+      - address-table-server-mongodb:/data/db/address-table-server
     ports:
       - "27017:27017"
 
 volumes:
-  address-table-server:
+  address-table-server-mongodb:

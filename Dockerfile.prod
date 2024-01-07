@@ -25,7 +25,7 @@ RUN curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.
     && tar xzf node_exporter-1.2.2.linux-amd64.tar.gz \
     && cp node_exporter-1.2.2.linux-amd64/node_exporter /usr/local/bin/ \
     && rm -rf node_exporter-1.2.2.linux-amd64 node_exporter-1.2.2.linux-amd64.tar.gz
-RUN npm install --only=prod
+RUN npm install
 
 COPY . .
 
