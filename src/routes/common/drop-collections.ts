@@ -6,7 +6,7 @@ import { BadRequestError } from "@com.xcodeclazz/monolithic-common";
 
 const router = express.Router();
 
-router.post("/api/common/drop/collections", async (req, res) => {
+router.get("/api/common/drop/collections", async (req, res) => {
   if (ENV() == "development") {
     try {
       await User.deleteMany({});
