@@ -10,14 +10,15 @@ import cors from "cors";
 import { NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
 import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
-import { authDropCollectionsRouter } from "./routes/auth/drop-collections";
 import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";
 import { authUserAdminRemoveRouter } from "./routes/auth/user-admin-remove";
 import { authUserAdminMakeRouter } from "./routes/auth/user-admin-make";
 import { authUserRegisterRouter } from "./routes/auth/user-register";
 import { authUserLogoutRouter } from "./routes/auth/user-logout";
 import { authUserLoginRouter } from "./routes/auth/user-login";
-import { authMetricsRouter } from "./routes/auth/metrics";
+
+import { commonDropCollectionsRouter } from "./routes/common/drop-collections";
+import { commonMetricsRouter } from "./routes/common/metrics";
 
 import { renderShowRouter } from "./routes/render/show-renders";
 import { renderCreateRouter } from "./routes/render/create-render";
@@ -41,8 +42,9 @@ app.use(authUserAdminRemoveRouter);
 app.use(authUserLogoutRouter);
 app.use(authUserLoginRouter);
 app.use(authUserAdminMakeRouter);
-app.use(authDropCollectionsRouter);
-app.use(authMetricsRouter);
+
+app.use(commonDropCollectionsRouter);
+app.use(commonMetricsRouter);
 
 app.use(renderShowRouter);
 app.use(renderCreateRouter);

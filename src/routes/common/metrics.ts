@@ -5,7 +5,7 @@ import { InternalServerError } from "@com.xcodeclazz/monolithic-common";
 
 const router = express.Router();
 
-router.get("/api/auth/metrics", async (req, res) => {
+router.get("/api/common/metrics", async (req, res) => {
   try {
     const response = await axios.get("http://localhost:9100/metrics");
     res.set("Content-Type", prometheus.register.contentType);
@@ -15,9 +15,9 @@ router.get("/api/auth/metrics", async (req, res) => {
   }
 });
 
-router.get("/api/auth/metrics/app", async (req, res) => {
+router.get("/api/common/metrics/app", async (req, res) => {
   res.set("Content-Type", prometheus.register.contentType);
   res.end(await prometheus.register.metrics());
 });
 
-export { router as authMetricsRouter };
+export { router as commonMetricsRouter };
