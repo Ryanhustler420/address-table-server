@@ -25,6 +25,8 @@ import { renderCreateRouter } from "./routes/render/create-render";
 import { renderPingRouter } from "./routes/render/ping-renders";
 import { renderRefreshRouter } from "./routes/render/refresh-renders";
 
+import { compilerRouter } from "./routes/compiler/compiler";
+
 const app = express();
 app.use(json());
 app.set("trust proxy", true);
@@ -50,6 +52,8 @@ app.use(renderShowRouter);
 app.use(renderCreateRouter);
 app.use(renderPingRouter);
 app.use(renderRefreshRouter);
+
+app.use(compilerRouter);
 
 app.get("/", (req, res) => {
   if (process.env.NODE_ENV === "production") {
