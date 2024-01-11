@@ -41,6 +41,16 @@ const renderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      require: true,
+      default: true,
+    },
+    isLocked: {
+      type: Boolean,
+      require: true,
+      default: false,
+    },
   },
   {
     toJSON: {

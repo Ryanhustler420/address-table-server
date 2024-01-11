@@ -40,7 +40,7 @@
     "@types/node": "^20.2.5",
     "@types/supertest": "^2.0.12",
     "@com.xcodeclazz/address-table-server": "0.0.1",
-    "@com.xcodeclazz/monolithic-common": "^0.0.13",
+    "@com.xcodeclazz/monolithic-common": "^0.0.15",
     "@com.xcodeclazz/celebrate": "^0.0.1",
     "axios": "^1.6.2",
     "prom-client": "^15.1.0",
