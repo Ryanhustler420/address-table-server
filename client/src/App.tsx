@@ -1,9 +1,9 @@
 import _ from "lodash";
-import AuthState from "./utils/common/auth-state";
-import React, { useState, useEffect } from 'react';
-import { Redirect, Route, useHistory } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from "react-redux";
+import { Redirect } from 'react-router-dom';
+import PrivateRoute from "./components/PrivateRoute";
 import { IonReactRouter } from '@ionic/react-router';
-import HistoryMethodsIPC, { IHistoryMethodsIPC } from "./components/HistoryMethodsIPC";
 
 import { homeOutline, settingsOutline } from 'ionicons/icons';
 import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonSpinner, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
@@ -36,7 +36,10 @@ import "./theme/theme.css";
 setupIonicReact();
 
 // these methods should go inside a file name.. utilitys.ts
-export const currentPath = () => window.location.pathname;
+export const currentPath = () => {
+  const match = window.location.pathname.match(/^\/[^?#]*/);
+  return match ? match[0] : '';
+}
 export const components = {
   home: {
     path: "/",
@@ -48,46 +51,29 @@ export const components = {
   },
 };
 const App: React.FC = () => {
-  const history = useHistory();
-  const authState = new AuthState();
-  const historyMethodsIPCRef = React.createRef<IHistoryMethodsIPC>();
-
-  const [visibleMainTabs, setVisibleMainTabs] = useState(false);
-  const showTabsHandler = _.debounce(() => setVisibleMainTabs(true), 1);
-  const hideTabsHandler = _.debounce(() => setVisibleMainTabs(false), 1);
+  const tabBarVisible = useSelector((state: any) => state.uiState.tabBarVisible);
 
   const getRoutes = () => {
     return (
       <IonRouterOutlet id="main-drawer" animated={true}>
-        <Route path={components.home.path} render={() => (<components.home.Component rendering={components.home.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
-        <Route path={components.settings.path} render={() => (<components.settings.Component rendering={components.settings.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
-        {/* <Route path={components.login.path} render={() => (<components.login.Component rendering={components.login.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
-        <Route path={components.events.path} render={() => (<components.events.Component rendering={components.events.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact />
-        <Route path={components.register.path} render={() => (<components.register.Component rendering={components.register.path === currentPath()} onHideTabs={hideTabsHandler} onShowTabs={showTabsHandler} />)} exact /> */}
-        <Redirect to={components.home.path} />
+        <PrivateRoute shouldAuthenticated={false} path={components.home.path} component={components.home.Component} redirect={components.settings.path} exact />
+        <PrivateRoute shouldAuthenticated={false} path={components.settings.path} component={components.settings.Component} redirect={components.settings.path} exact />
+        {/* Open in both case i.e auth, not-auth */}
+        {/* <Route path={"/open"} component={IonApp} exact /> */}
+        {/* <Redirect to={components.home.path} /> */}
       </IonRouterOutlet>
     );
   };
-
-  useEffect(() => {
-    let isAuthenticated = authState.validateUser();
-    // if (!isAuthenticated && window.location.pathname == components.login.path) historyMethodsIPCRef.current?.clearAndGoto(components.login.path);
-    // else if (!isAuthenticated && window.location.pathname == components.register.path) historyMethodsIPCRef.current?.clearAndGoto(components.register.path);
-    // else if (isAuthenticated && window.location.pathname == components.login.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
-    // else if (isAuthenticated && window.location.pathname == components.register.path) historyMethodsIPCRef.current?.clearAndGoto(components.home.path);
-    // else if (!isAuthenticated) historyMethodsIPCRef.current?.clearAndGoto(components.login.path);
-  });
 
   return (
     <IonApp>
       <ApplicationContextProvider>
         <IonReactRouter>
           {getRoutes()}
-          <HistoryMethodsIPC ref={historyMethodsIPCRef} />
           <React.Suspense fallback={<IonSpinner />}>
             <IonTabs>
               {getRoutes()}
-              <IonTabBar slot="bottom" hidden={!visibleMainTabs} className={`${ !visibleMainTabs ? 'hidden' : ''}`}>
+              <IonTabBar slot="bottom" hidden={!tabBarVisible} className={`${ !tabBarVisible ? 'hidden' : ''}`}>
                 <IonTabButton tab="settings" href={components.settings.path}>
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>

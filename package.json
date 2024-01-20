@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "test-all:ci": "jest --maxWorkers=8 --testTimeout=1200000",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "watch": "cross-env NODE_ENV=development ts-node-dev --poll --respawn src/index.ts",
     "dev": "concurrently \"npm run watch\" \"npm run dev --prefix client\"",
@@ -22,7 +23,8 @@
       "./src/test/setup.ts"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/dist/"
+      "<rootDir>/dist/",
+      "<rootDir>/client/"
     ]
   },
   "keywords": [],
@@ -40,7 +42,7 @@
     "@types/node": "^20.2.5",
     "@types/supertest": "^2.0.12",
     "@com.xcodeclazz/address-table-server": "0.0.3",
-    "@com.xcodeclazz/monolithic-common": "^0.0.15",
+    "@com.xcodeclazz/monolithic-common": "^0.0.22",
     "@com.xcodeclazz/celebrate": "^0.0.1",
     "axios": "^1.6.2",
     "prom-client": "^15.1.0",

@@ -20,14 +20,8 @@ import Sound from '../sfxs';
 import WinFx from '../sfxs/mixkit-win-game';
 import LooseFx from '../sfxs/mixkit-lose-game';
 
-import './Home.css';
-
 const screen = { width: 0, name: 'sm' };
-const Home: React.FC<{
-  onShowTabs: () => void;
-  onHideTabs: () => void;
-  rendering: boolean;
-}> = props => {
+const Home: React.FC<{}> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
   const authState = new AuthState();
@@ -35,7 +29,6 @@ const Home: React.FC<{
   const user: {} = useSelector((state: any) => state.userState.user);
   const [post, setPost] = useState<any>({});
 
-  useEffect(() => { if (props.rendering) { props.onShowTabs(); } });
   useEffect(() => {
     socket.connect();
 

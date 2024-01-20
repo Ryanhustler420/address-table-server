@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.xcodeclazz.address-table-server',
+  appId: 'com.xcodeclazz.ionic.address-table-server',
   appName: 'address-table-server',
   webDir: 'build',
   bundledWebRuntime: false,

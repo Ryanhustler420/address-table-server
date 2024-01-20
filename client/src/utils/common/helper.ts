@@ -1,4 +1,5 @@
 import md5 from 'blueimp-md5';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 export function hash(keyword: string) { return md5(keyword); }
 export function isMongoId(oid: string) { return oid.length === 24 && !isNaN(Number('0x' + oid)) }
@@ -184,4 +185,15 @@ export function imageFallback(url: string, final: (final: string) => void) {
     im.onload = function () { final(url); }
     im.onerror = function () { final('assets/icon/icon.png'); }
     im.src = url;
+}
+
+export function listenScreenRotation(cb: (position: 'portrait' | 'landscape') => void) {
+    ScreenOrientation.addListener('screenOrientationChange', (o) => {
+        if (o.type.startsWith('portrait')) cb('portrait');
+        else cb('landscape');
+    });
+}
+
+export function unlistenScreenRotation() {
+    ScreenOrientation.removeAllListeners();
 }
