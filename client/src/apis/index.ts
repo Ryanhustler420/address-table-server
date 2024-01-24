@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { routes } from './routes';
+import Capacitor from '../utils/Capacitor';
 import AuthState from '../utils/common/auth-state';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 
@@ -26,6 +27,12 @@ export const getCurrentUser = _.debounce((cb: (response: HttpResponse) => void, 
         url: routes.GET_CURRENT_USER,
         headers: commonHeader(),
     }).then(e => handle(e, cb)).catch(err);
+});
+
+export const errorToast = _.debounce((error: any) => {
+    // @ts-ignore
+    const message = _.first(error.response?.data.errors)?.message;
+    if (message) Capacitor.toast(message, "long");
 });
 
 const commonHeader = () => {

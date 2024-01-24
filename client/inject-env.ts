@@ -29,13 +29,16 @@ try {
   const host = namedArgs["--host"] || namedArgs["-h"];
   // const arg2 = namedArgs["--url"] || namedArgs["-u"];
 
-  // Output the arguments
-  const env = `REACT_APP_SERVER_HOST_URL=${host}
-REACT_APP_VERSION=v1
-EXTRA=12
-`;
+  let page = '';
+  const values = {
+    REACT_APP_SERVER_HOST_URL: host,
+    REACT_APP_VERSION: "v1",
+    EXTRA: 12,
+  }
+  for (const key in values) page += `${key}=${values[key]}\n`;
 
-  require("fs").writeFileSync(".env", env, "utf8");
+  // Output the arguments
+  require("fs").writeFileSync(`${__dirname}/.env`, page, "utf8");
 } catch (error) {
   console.error("Error:", error.message);
   process.exit(1); // Exit the process with an error code

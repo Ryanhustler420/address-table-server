@@ -29,7 +29,9 @@ RUN npm install
 
 COPY . .
 
-RUN npm install --force --prefix client
+RUN npm install --prefix client
+# RUN node client/inject-env.ts -h=https://localhost:8080 --cpl=https://example.com
+RUN node client/inject-env.ts -h=https://localhost:8080
 RUN npm run build --prefix client
 RUN npm run build
 

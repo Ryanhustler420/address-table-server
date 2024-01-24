@@ -71,9 +71,9 @@ const App: React.FC = () => {
         <IonReactRouter>
           {getRoutes()}
           <React.Suspense fallback={<IonSpinner />}>
-            <IonTabs>
+            {tabBarVisible && <IonTabs>
               {getRoutes()}
-              <IonTabBar slot="bottom" hidden={!tabBarVisible} className={`${ !tabBarVisible ? 'hidden' : ''}`}>
+              <IonTabBar slot="bottom" hidden={!tabBarVisible}>
                 <IonTabButton tab="settings" href={components.settings.path}>
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>
@@ -84,7 +84,7 @@ const App: React.FC = () => {
                   <IonLabel>Home</IonLabel>
                 </IonTabButton>
               </IonTabBar>
-            </IonTabs>
+            </IonTabs>}
           </React.Suspense>
         </IonReactRouter>
       </ApplicationContextProvider>
