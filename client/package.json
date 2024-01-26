@@ -2,6 +2,7 @@
   "name": "address-table-server",
   "version": "0.0.1",
   "description": "An Ionic project",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "@awesome-cordova-plugins/toast": "^6.6.0",

@@ -1,4 +1,4 @@
-const host = process.env.REACT_APP_SERVER_HOST_URL || 'http://localhost:8080';
+const host = process.env.REACT_APP_SERVER_HOST_URL || '';
 export const routes = {
   GET_AUTH_CURRENT_USER: `${host}/api/auth/currentuser`,
   POST_AUTH_REMOVE_ADMIN: `${host}/api/auth/remove-admin`,
