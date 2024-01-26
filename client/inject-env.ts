@@ -31,7 +31,7 @@ try {
 
   let page = '';
   const values = {
-    REACT_APP_SERVER_HOST_URL: host,
+    REACT_APP_SERVER_HOST_URL: host?.trim(),
     REACT_APP_VERSION: "v1",
     EXTRA: 12,
   }
