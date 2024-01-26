@@ -1,5 +1,5 @@
+import { UserAttrs } from '@com.xcodeclazz/address-table-server';
 import _ from 'lodash';
-import { IPreviewUser } from '../../apis/definations';
 
 export default class AuthState {
 
@@ -10,23 +10,23 @@ export default class AuthState {
         return this.get('lock');
     }
 
-    saveUser(cache: IPreviewUser | null): void {
+    saveUser(cache: UserAttrs | null): void {
         this.save('auth_table', JSON.stringify(cache));
     }
 
     validateUser() {
         let token = this.getToken();
-        let user = this.getUser() as IPreviewUser;
+        let user = this.getUser() as UserAttrs;
         if (user != null && token != null) return true;
         return false;
     };
 
-    getUser() {
+    getUser(): UserAttrs | null{
         if (this.get('auth_table') == null) return null;
         try {
             return JSON.parse(this.get('auth_table')!.toString());
         } catch (err) {
-            return null
+            return null;
         }
     }
 

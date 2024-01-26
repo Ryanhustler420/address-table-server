@@ -1,5 +1,6 @@
 import express from "express";
 import { Render } from "../../models/key/render";
+import { RenderResponse_ShowRenders } from "@com.xcodeclazz/address-table-server";
 import {
   adminUser,
   currentUser,
@@ -15,7 +16,8 @@ router.get(
   adminUser,
   async (req, res) => {
     const renders = await Render.find().sort({ capacity: 1 });
-    res.json(renders);
+    const response: RenderResponse_ShowRenders = { renders };
+    res.json(response);
   }
 );
 

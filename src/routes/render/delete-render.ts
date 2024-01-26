@@ -2,8 +2,8 @@ import express from "express";
 import { Render } from "../../models/key/render";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
 import {
-  RenderResponse_CreateRender,
-  RenderPayloadJoi_CreateRender,
+  RenderResponse_DeleteRender,
+  RenderPayloadJoi_DeleteRender,
 } from "@com.xcodeclazz/address-table-server";
 import {
   adminUser,
@@ -13,18 +13,17 @@ import {
 
 const router = express.Router();
 
-router.post(
+router.delete(
   "/api/render",
-  celebrate({ [Segments.BODY]: RenderPayloadJoi_CreateRender }),
+  celebrate({ [Segments.BODY]: RenderPayloadJoi_DeleteRender }),
   currentUser,
   requireAuth,
   adminUser,
   async (req, res) => {
-    const render = Render.build(req.body);
-    await render.save();
-    const response: RenderResponse_CreateRender = render;
+    const ack = await Render.findOneAndDelete({ url: req.body.url });
+    const response: RenderResponse_DeleteRender = { url: req.body.url };
     res.json(response);
   }
 );
 
-export { router as renderCreateRouter };
+export { router as renderDeleteRouter };

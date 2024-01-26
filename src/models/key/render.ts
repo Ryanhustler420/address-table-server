@@ -29,6 +29,10 @@ const renderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    tags: {
+      type: [String],
+      required: true
+    },
     serviceId: {
       type: String,
       required: true,

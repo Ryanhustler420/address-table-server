@@ -23,9 +23,15 @@ import { commonMetricsRouter } from "./routes/common/metrics";
 import { renderShowRouter } from "./routes/render/show-renders";
 import { renderCreateRouter } from "./routes/render/create-render";
 import { renderPingRouter } from "./routes/render/ping-renders";
-import { renderRefreshRouter } from "./routes/render/refresh-renders";
+import { renderDeleteRouter } from "./routes/render/delete-render";
+import { renderRedeployRouter } from "./routes/render/redeploy-renders";
+import { renderShowDeadRouter } from "./routes/render/show-renders-dead";
+import { renderShowCountRouter } from "./routes/render/show-renders-count";
 
-import { compilerRouter } from "./routes/compiler/compiler";
+import { compilersCppRouter } from "./routes/compilers/cpp";
+import { compilersNodeRouter } from "./routes/compilers/node";
+import { compilersJavaRouter } from "./routes/compilers/java";
+import { compilersPythonRouter } from "./routes/compilers/python";
 
 const app = express();
 app.use(json());
@@ -50,10 +56,16 @@ app.use(commonMetricsRouter);
 
 app.use(renderShowRouter);
 app.use(renderCreateRouter);
+app.use(renderDeleteRouter);
 app.use(renderPingRouter);
-app.use(renderRefreshRouter);
+app.use(renderShowDeadRouter);
+app.use(renderRedeployRouter);
+app.use(renderShowCountRouter);
 
-app.use(compilerRouter);
+app.use(compilersCppRouter);
+app.use(compilersJavaRouter);
+app.use(compilersNodeRouter);
+app.use(compilersPythonRouter);
 
 app.get("/", (req, res) => {
   if (process.env.NODE_ENV === "production") {

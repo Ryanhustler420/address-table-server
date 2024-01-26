@@ -1,15 +1,18 @@
 import _ from "lodash";
 import React from 'react';
-import { useSelector } from "react-redux";
-import { Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import PrivateRoute from "./components/PrivateRoute";
 import { IonReactRouter } from '@ionic/react-router';
 
+import { useSelector } from "react-redux";
 import { homeOutline, settingsOutline } from 'ionicons/icons';
 import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonSpinner, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Settings from "./pages/Settings";
+import Dashboard from "./pages/Dashboard";
 
 import ApplicationContextProvider from './data/ApplicationContextProvider';
 
@@ -45,6 +48,18 @@ export const components = {
     path: "/",
     Component: Home,
   },
+  login: {
+    path: '/login',
+    Component: Login
+  },
+  register: {
+    path: '/register',
+    Component: Register
+  },
+  dashboard: {
+    path: '/dashboard',
+    Component: Dashboard
+  },
   settings: {
     path: "/settings",
     Component: Settings,
@@ -55,12 +70,15 @@ const App: React.FC = () => {
 
   const getRoutes = () => {
     return (
-      <IonRouterOutlet id="main-drawer" animated={true}>
-        <PrivateRoute shouldAuthenticated={false} path={components.home.path} component={components.home.Component} redirect={components.settings.path} exact />
-        <PrivateRoute shouldAuthenticated={false} path={components.settings.path} component={components.settings.Component} redirect={components.settings.path} exact />
+      <IonRouterOutlet id="main-drawer" animated={false}>
+        <PrivateRoute shouldAuthenticated={false} path={components.login.path} component={components.login.Component} redirect={components.dashboard.path} exact />
+        <PrivateRoute shouldAuthenticated={false} path={components.register.path} component={components.register.Component} redirect={components.dashboard.path} exact />
+        <PrivateRoute shouldAuthenticated={true} path={components.dashboard.path} component={components.dashboard.Component} redirect={components.login.path} exact />
+
         {/* Open in both case i.e auth, not-auth */}
-        {/* <Route path={"/open"} component={IonApp} exact /> */}
-        {/* <Redirect to={components.home.path} /> */}
+        <Route path={components.settings.path} component={Settings} exact />
+        <Route path={components.home.path} component={Home} exact />
+        <Redirect to={components.home.path} />
       </IonRouterOutlet>
     );
   };
