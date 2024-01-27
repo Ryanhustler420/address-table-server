@@ -9,6 +9,7 @@ const server = socket(app);
 const start = async () => {
   try {
     await mongoose.connect(`${MONGO_URI}/${DATABASE}`);
+    // await rabbitMqWrapper.connect(RABBIT_MQ);
     console.log("Connected to MongoDB");
     spawn("/usr/local/bin/node_exporter", {
       detached: false,

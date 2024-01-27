@@ -24,6 +24,7 @@ services:
         - NODE_ENV=development
         - ADMIN_PASSWORD=something
         - DATABASE=address-table-server
+        - RABBIT_MQ=amqp://appname:password@localhost:port
         - MONGO_URI=mongodb://address-table-server-mongodb:27017
     restart: always
     ports:
