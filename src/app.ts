@@ -70,7 +70,7 @@ app.use(compilersPythonRouter);
 app.all("*", (req, res) => {
   if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  } else res.json({ message: "NO UI FOUND" });
+  } else res.json({ message: "address-table-server" });
 });
 
 app.use(celebrate_custome_errors());

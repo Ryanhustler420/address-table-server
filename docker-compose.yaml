@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "3000:3000"
+      - "4001:4001"
     environment:
       - WATCHPACK_POLLING=true
     volumes:
@@ -28,10 +28,10 @@ services:
         - MONGO_URI=mongodb://address-table-server-mongodb:27017
     restart: always
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       - JWT_KEY=something
-      - PORT=8080
+      - PORT=8081
     volumes:
       - /app/node_modules
       - /app/dist
@@ -45,7 +45,7 @@ services:
     volumes:
       - address-table-server-mongodb:/data/db/address-table-server
     ports:
-      - "27017:27017"
+      - "27011:27017"
 
 volumes:
   address-table-server-mongodb:
