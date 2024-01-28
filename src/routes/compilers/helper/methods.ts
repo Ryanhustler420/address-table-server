@@ -11,8 +11,10 @@ const reduceCapacity = async (url: string) => {
 
 export const getFreeUrlByTags = async (tags: string[]) => {
   const render = await Render.findOne({
-    tags: { $in: tags },
-    capacity: { $gt: 0 },
+    $and: [
+      { tags: { $in: tags } },
+      { capacity: { $gt: 0 } }
+    ]
   });
   if (render) {
     await reduceCapacity(render.url);
