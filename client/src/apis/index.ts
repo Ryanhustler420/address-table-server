@@ -11,7 +11,7 @@ const authState = new AuthState();
 
 const handle = (response: HttpResponse, cb: (response: HttpResponse) => void) => {
     const statusCode = response.status;
-    if (statusCode >= 200 && statusCode <= 399) cb(response);
+    if (statusCode >= 200 && statusCode <= 399) return cb(response);
     else if (statusCode >= 400 && statusCode <= 499) throw { response };
     else if (statusCode >= 500 && statusCode <= 599) throw { response };
     throw { response };

@@ -3,7 +3,7 @@ import axios from "axios";
 import { getFreeUrlByTags } from "./helper/methods";
 import express, { Request, Response } from "express";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
-import { CompilersPayloadJoi_Node } from "@com.xcodeclazz/compile-run-v2";
+import { CompilersPayloadJoi_Node, CompilersResponse_Node } from "@com.xcodeclazz/compile-run-v2";
 
 const router = express.Router();
 
@@ -15,7 +15,8 @@ router.post("/api/compilers/node",
       try {
         const hitpoint = `${freeUrl.url}/api/compilers/node`;
         const result = await axios.post(hitpoint, req.body);
-        res.json(result.data);
+        const response: CompilersResponse_Node = result.data;
+        res.json(response);
       } catch (error) {
         // @ts-ignore
         console.error(error?.message);

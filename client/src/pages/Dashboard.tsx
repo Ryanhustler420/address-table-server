@@ -5,8 +5,8 @@ import Header from "../components/common/Header";
 import AuthState from "../utils/common/auth-state";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { closeOutline, openOutline } from "ionicons/icons";
 import { RenderAttrs } from "@com.xcodeclazz/address-table-server";
+import { clipboardOutline, closeOutline, openOutline } from "ionicons/icons";
 import { Roles } from "@com.xcodeclazz/monolithic-common/build/constants/users";
 import { deleteRenderDelete, errorToast, getRenders, postRenderCreate } from "../apis";
 import { insertRender, removeRender, saveRenders } from "../redux/reducers/renderState";
@@ -265,6 +265,9 @@ const Dashboard: React.FC<{}> = (props) => {
                   <IonItem button key={idx} color={!el.isActive ? "danger" : ""}>
                     <IonButton fill="clear" href={`${el.url}`} target="_blank">
                       <IonIcon slot="icon-only" icon={openOutline} />
+                    </IonButton>
+                    <IonButton fill="clear" onClick={e => navigator.clipboard.writeText(JSON.stringify(el))}>
+                      <IonIcon slot="icon-only" icon={clipboardOutline} />
                     </IonButton>
                     <IonLabel className="font-bold underline">{el.url}</IonLabel>
                     <IonChip color="success">Cap: {el.capacity}</IonChip>
