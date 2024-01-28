@@ -69,7 +69,7 @@ const Register: React.FC<{}> = props => {
 
     return (
         <IonPage>
-            <Header settingIcon backBtn="/" />
+            <Header themeBtn settingIcon backBtn="/" />
             <IonContent fullscreen className="ion-padding">
                 <section className='h-full w-full'>
                     <IonGrid className='h-full'>

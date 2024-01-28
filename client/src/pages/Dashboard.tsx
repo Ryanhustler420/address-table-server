@@ -20,6 +20,7 @@ import {
   IonItem,
   IonChip,
   IonIcon,
+  IonCard,
   IonInput,
   IonLabel,
   IonButton,
@@ -131,7 +132,7 @@ const Dashboard: React.FC<{}> = (props) => {
 
   return (
     <IonPage>
-      <Header logoutIcon />
+      <Header themeBtn logoutIcon />
       <IonContent fullscreen>
         <IonRefresher
           slot="fixed"
@@ -142,116 +143,118 @@ const Dashboard: React.FC<{}> = (props) => {
         >
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        <IonGrid className="overflow-hidden h-full bg-yellow-500/20">
+        <IonGrid className="overflow-hidden h-full">
           <IonRow className="h-full overflow-scroll">
             <IonCol size="4">
-              <IonList className="h-full rounded-lg">
-                <IonListHeader>
-                  <IonLabel>Render Web Service</IonLabel>
-                </IonListHeader>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={urlRef}
-                        label="Url"
-                        type="email"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Url"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={capacityRef}
-                        type="number"
-                        label="Capacity"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Capacity"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={emailRef}
-                        label="Email"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Email"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={tagsRef}
-                        label="Tags"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Tags, Comma Seperated"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={serviceIdRef}
-                        label="Srv"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Srv"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={authTokenRef}
-                        label="Auth Token"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Auth Token"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonInput
-                        ref={imageNameRef}
-                        label="Image Name"
-                        labelPlacement="floating"
-                        fill="outline"
-                        placeholder="Image Name"
-                      />
-                    </IonCol>
-                  </IonRow>
-                  <IonRow>
-                    <IonCol>
-                      <IonButtons>
-                        <IonButton disabled>
-                          {isCreating && <IonSpinner name="dots" />}
-                        </IonButton>
-                      </IonButtons>
-                    </IonCol>
-                    <IonCol>
-                      <IonButtons>
-                        <IonButton
-                          color="primary"
-                          disabled={!isAdmin()}
-                          onClick={onCreateHandler}
-                        >
-                          Create Render
-                        </IonButton>
-                        <IonButton onClick={clearForm}>Clear Form</IonButton>
-                      </IonButtons>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </IonList>
+              <IonCard>
+                <IonList className="h-full rounded-lg">
+                  <IonListHeader>
+                    <IonLabel>Render Web Service</IonLabel>
+                  </IonListHeader>
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={urlRef}
+                          label="Url"
+                          type="email"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Url"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={capacityRef}
+                          type="number"
+                          label="Capacity"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Capacity"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={emailRef}
+                          label="Email"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Email"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={tagsRef}
+                          label="Tags"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Tags, Comma Seperated"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={serviceIdRef}
+                          label="Srv"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Srv"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={authTokenRef}
+                          label="Auth Token"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Auth Token"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonInput
+                          ref={imageNameRef}
+                          label="Image Name"
+                          labelPlacement="floating"
+                          fill="outline"
+                          placeholder="Image Name"
+                        />
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonButtons>
+                          <IonButton disabled>
+                            {isCreating && <IonSpinner name="dots" />}
+                          </IonButton>
+                        </IonButtons>
+                      </IonCol>
+                      <IonCol>
+                        <IonButtons>
+                          <IonButton
+                            color="primary"
+                            disabled={!isAdmin()}
+                            onClick={onCreateHandler}
+                          >
+                            Create Render
+                          </IonButton>
+                          <IonButton onClick={clearForm}>Clear Form</IonButton>
+                        </IonButtons>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonList>
+              </IonCard>
             </IonCol>
             <IonCol size="8" className="h-full overflow-scroll">
               <IonList lines="none" className="rounded-lg h-full overflow-scroll ion-no-padding">

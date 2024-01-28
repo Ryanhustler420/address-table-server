@@ -7,11 +7,11 @@ import { RenderResponse_ShowCountRenders } from "@com.xcodeclazz/address-table-s
 
 const Home: React.FC<{}> = (props) => {
   const [renders, setRenders] = useState<RenderResponse_ShowCountRenders>();
-  useEffect(() => getRendersCount((response) => setRenders({ state: response.data }), errorToast), []);
+  useEffect(() => getRendersCount((response) => setRenders({ state: response.data.state }), errorToast), []);
 
   return (
     <IonPage>
-      <Header logoutIcon dashboardIcon />
+      <Header themeBtn logoutIcon dashboardIcon />
       <IonContent fullscreen className="ion-padding">
         <h1>Compilers List</h1>
         <ul>

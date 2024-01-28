@@ -10,20 +10,12 @@ import { AuthPayload_LoginUser, AuthPayload_MakeUserAdmin, AuthPayload_RegisterU
 const authState = new AuthState();
 
 const handle = (response: HttpResponse, cb: (response: HttpResponse) => void) => {
-    switch(response.status) {
-        case 401:
-            authState.saveUser(null);
-            authState.saveToken('');
-            cb(response);
-            break;
-        case 200:
-        case 201:
-            cb(response);
-            break;
-        default:
-            throw { response };
-    }
-}
+    const statusCode = response.status;
+    if (statusCode >= 200 && statusCode <= 399) cb(response);
+    else if (statusCode >= 400 && statusCode <= 499) throw { response };
+    else if (statusCode >= 500 && statusCode <= 599) throw { response };
+    throw { response };
+};
 
 export const getCurrentUser = _.debounce((cb: (response: HttpResponse) => void, err: (e: any) => void) => {
     CapacitorHttp.get({

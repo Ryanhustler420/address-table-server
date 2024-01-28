@@ -4,7 +4,9 @@ import { useHistory } from "react-router";
 import { Dialog } from "@capacitor/dialog";
 import { errorToast, postLogout } from "../../apis";
 import AuthState from "../../utils/common/auth-state";
-import { compassOutline, logOutOutline, settingsOutline } from "ionicons/icons";
+import { isDark, toggleDark } from '../../utils/common/helper';
+import { PREFERENCE_KEYS, setPreference } from '../../utils/common/cache';
+import { compassOutline, logOutOutline, moonOutline, settingsOutline } from "ionicons/icons";
 import {
   IonIcon,
   IonTitle,
@@ -19,6 +21,7 @@ const Header: React.FC<{
   dashboardIcon?: boolean;
   settingIcon?: boolean;
   logoutIcon?: boolean;
+  themeBtn?: boolean;
   backBtn?: string;
 }> = (props) => {
   const history = useHistory();
@@ -69,6 +72,9 @@ const Header: React.FC<{
                 <IonButton routerDirection="none" routerLink="/register">Register</IonButton>
               </>
             )}
+          {props.themeBtn && (<IonButton title="theme" onClick={e => { toggleDark(); setPreference(PREFERENCE_KEYS.DARK_MODE, `${isDark()}`); }}>
+            <IonIcon slot="icon-only" icon={moonOutline} />
+          </IonButton>)}
           {props.settingIcon && <IonButton routerDirection="none" routerLink="/settings">
             <IonIcon slot="icon-only" icon={settingsOutline} />
           </IonButton>}
