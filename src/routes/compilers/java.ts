@@ -30,6 +30,27 @@ router.post("/api/compilers/java",
   }
 );
 
+router.post("/api/compilers/java/single",
+  celebrate({ [Segments.BODY]: CompilersPayloadJoi_Java }),
+  async (req: Request, res: Response) => {
+    const freeUrl = await getFreeUrlByTags(['java']);
+    if (freeUrl?.url) {
+      try {
+        const hitpoint = `${freeUrl.url}/api/compilers/java/single`;
+        const result = await axios.post(hitpoint, req.body);
+        const response: CompilersResponse_Java = result.data;
+        res.json(response);
+      } catch (error) {
+        // @ts-ignore
+        console.error(error?.message);
+        res.json({ result: null });
+      }
+    } else {
+      res.json({ result: null });
+    }
+  }
+);
+
 // No user input allowed here...
 router.post("/api/compilers/java/plain",
   celebrate({ [Segments.BODY]: CompilersPayloadJoi_Java }),
