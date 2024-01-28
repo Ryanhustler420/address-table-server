@@ -120,7 +120,7 @@ const Dashboard: React.FC<{}> = (props) => {
   const getRendersList = (event?: CustomEvent<RefresherEventDetail>) => {
     setFetching(true);
     getRenders(response => {
-      dispatch(saveRenders({ renders: response.data }));
+      dispatch(saveRenders({ renders: response.data.renders }));
       event?.detail?.complete();
       setFetching(false);
     }, error => {
