@@ -7,7 +7,7 @@ import cookieSession from "cookie-session";
 import cookieConfig from "./services/cookie-config";
 import cors from "cors";
 
-import { NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { errorHandler } from "@com.xcodeclazz/monolithic-common";
 import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
 import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";

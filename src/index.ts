@@ -1,3 +1,4 @@
+import { rateLimit } from 'express-rate-limit';
 import { spawn } from "child_process";
 import mongoose from "mongoose";
 import socket from "./socket";
@@ -5,6 +6,11 @@ import { app } from "./app";
 import { PORT, DATABASE, MONGO_URI } from "./env";
 
 const server = socket(app);
+app.use(rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 Minute(s)
+  message: { result: null },
+  limit: 10,
+}));
 
 const start = async () => {
   try {

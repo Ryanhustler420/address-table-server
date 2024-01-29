@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
       args:
+        - BACKEND_URL=/
         - NODE_ENV=production
         - ADMIN_PASSWORD=something
         - DATABASE=address-table-server

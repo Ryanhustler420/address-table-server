@@ -139,6 +139,12 @@ export const postRedeployRenders = _.debounce(( cb: (response: HttpResponse) => 
     }).then(e => handle(e, cb)).catch(err);
 });
 
+export const getRandomProgrammingJoke = _.debounce(( cb: (response: HttpResponse) => void, err: (e: any) => void) => {
+    CapacitorHttp.get({
+        url: "https://official-joke-api.appspot.com/jokes/programming/random",
+    }).then(e => handle(e, cb)).catch(err);
+});
+
 export const errorToast = _.debounce((error: any) => {
     // @ts-ignore
     const message = _.first(error.response?.data.errors)?.message;

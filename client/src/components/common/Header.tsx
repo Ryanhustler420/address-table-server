@@ -52,8 +52,9 @@ const Header: React.FC<{
         {props.backBtn && <IonButtons slot="start" className='md:hidden'>
           <IonBackButton defaultHref={props.backBtn}></IonBackButton>
         </IonButtons>}
-        <IonTitle className="cursor-pointer" onClick={e => history.push("/")}>
-          <strong className="text-yellow-500">x</strong><strong>CodeClazz</strong>
+        <IonTitle>
+          <strong className="text-yellow-500">x</strong>
+          <strong className="cursor-pointer" onClick={(e) => history.push("/")}>CodeClazz</strong>
         </IonTitle>
         <IonButtons slot="end">
           {authState.validateUser() ? 
