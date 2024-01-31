@@ -3,6 +3,7 @@ import axios from "axios";
 import { getFreeUrlByTags } from "./helper/methods";
 import express, { Request, Response } from "express";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
+import { nativePackageCompiler } from "./common/python-helpers";
 import { CompilersPayloadJoi_Python, CompilersResponse_Python } from "@com.xcodeclazz/compile-run-v2";
 
 const router = express.Router();
@@ -23,7 +24,8 @@ router.post("/api/compilers/python",
         res.json({ result: null });
       }
     } else {
-      res.json({ result: null });
+      const response: CompilersResponse_Python = await nativePackageCompiler(req.body);
+      res.json(response);
     }
   }
 );

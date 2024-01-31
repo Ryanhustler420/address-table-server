@@ -23,6 +23,9 @@ COPY tsconfig.json .
 
 RUN apt-get update
 RUN apt-get -y install nano
+RUN apt-get -y install python3
+RUN apt-get -y install systemd
+RUN apt-get -y install gcc g++ make
 RUN curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz \
     && tar xzf node_exporter-1.2.2.linux-amd64.tar.gz \
     && cp node_exporter-1.2.2.linux-amd64/node_exporter /usr/local/bin/ \

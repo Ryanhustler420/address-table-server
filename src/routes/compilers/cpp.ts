@@ -2,6 +2,7 @@ import _ from "lodash";
 import axios from "axios";
 import { getFreeUrlByTags } from "./helper/methods";
 import express, { Request, Response } from "express";
+import { nativePackageCompiler } from "./common/cpp-helpers";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
 import { CompilersPayloadJoi_Cpp, CompilersResponse_Cpp } from "@com.xcodeclazz/compile-run-v2";
 
@@ -23,7 +24,8 @@ router.post("/api/compilers/cpp",
         res.json({ result: null });
       }
     } else {
-      res.json({ result: null });
+      const response: CompilersResponse_Cpp = await nativePackageCompiler(req.body);
+      res.json(response);
     }
   }
 );
