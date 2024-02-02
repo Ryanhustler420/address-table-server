@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import PrivateRoute from "./components/PrivateRoute";
+import NonPrivateRoute from "./components/NonPrivateRoute";
 import { IonReactRouter } from '@ionic/react-router';
 
 import { useSelector } from "react-redux";
@@ -71,9 +72,9 @@ const App: React.FC = () => {
   const getRoutes = () => {
     return (
       <IonRouterOutlet id="main-drawer" animated={false}>
-        <PrivateRoute shouldAuthenticated={false} path={components.login.path} component={components.login.Component} redirect={components.dashboard.path} exact />
-        <PrivateRoute shouldAuthenticated={false} path={components.register.path} component={components.register.Component} redirect={components.dashboard.path} exact />
-        <PrivateRoute shouldAuthenticated={true} path={components.dashboard.path} component={components.dashboard.Component} redirect={components.login.path} exact />
+        <NonPrivateRoute path={components.login.path} component={components.login.Component} redirect={components.dashboard.path} exact />
+        <NonPrivateRoute path={components.register.path} component={components.register.Component} redirect={components.dashboard.path} exact />
+        <PrivateRoute path={components.dashboard.path} component={components.dashboard.Component} redirect={components.login.path} exact />
 
         {/* Open in both case i.e auth, not-auth */}
         <Route path={components.settings.path} component={Settings} exact />

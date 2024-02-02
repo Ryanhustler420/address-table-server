@@ -187,6 +187,13 @@ export function imageFallback(url: string, final: (final: string) => void) {
     im.src = url;
 }
 
+export function isValidObjectId(str: string): boolean {
+    // A valid MongoDB ObjectId consists of a 24-character hexadecimal string
+    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+  
+    return objectIdRegex.test(str);
+}
+
 export function listenScreenRotation(cb: (position: 'portrait' | 'landscape') => void) {
     ScreenOrientation.addListener('screenOrientationChange', (o) => {
         if (o.type.startsWith('portrait')) cb('portrait');

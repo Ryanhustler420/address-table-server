@@ -2,12 +2,12 @@ import React from "react";
 import AuthState from "../utils/common/auth-state";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
-interface PrivateRouteProps extends RouteProps {
+interface NonPrivateRouteProps extends RouteProps {
   component: React.ComponentType<any>;
   redirect: string;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({
+const NonPrivateRoute: React.FC<NonPrivateRouteProps> = ({
   component: Component,
   redirect,
   ...rest
@@ -18,7 +18,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     <Route
       {...rest}
       render={(props) =>
-        authState.validateUser() ? (
+        !authState.validateUser() ? (
           <Component {...props} />
         ) : (
           <Redirect to={redirect} />
@@ -28,4 +28,4 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   );
 };
 
-export default PrivateRoute;
+export default NonPrivateRoute;

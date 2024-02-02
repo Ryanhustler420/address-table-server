@@ -9,6 +9,14 @@ const Home: React.FC<{}> = (props) => {
   const [renders, setRenders] = useState<RenderResponse_ShowCountRenders>();
   useEffect(() => getRendersCount((response) => setRenders({ state: response.data.state }), errorToast), []);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      return event.returnValue = 'Are you sure you want to leave?';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
   return (
     <IonPage>
       <Header themeBtn logoutIcon dashboardIcon />
