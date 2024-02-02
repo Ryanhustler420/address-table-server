@@ -15,8 +15,8 @@ args.forEach((arg) => {
 
 // Validate arguments
 const validateArguments = () => {
-  if (!namedArgs["--host"] && !namedArgs["-h"])
-    throw new Error("Argument --host (-h) is required.");
+  if (!namedArgs["--backend"] && !namedArgs["-b"])
+    throw new Error("Argument --backend (-b) is required.");
   // if (!namedArgs["--url"] && !namedArgs["-u"])
   //   throw new Error("Argument --url (-u) is required.");
 };
@@ -26,12 +26,12 @@ try {
   validateArguments();
 
   // Access named arguments
-  const host = namedArgs["--host"] || namedArgs["-h"];
+  const backend = namedArgs["--backend"] || namedArgs["-b"];
   // const arg2 = namedArgs["--url"] || namedArgs["-u"];
 
   let page = '';
   const values = {
-    REACT_APP_SERVER_HOST_URL: host,
+    REACT_APP_SERVER_BACKEND_URL: backend,
     REACT_APP_VERSION: "v1",
     EXTRA: 12,
   }
