@@ -39,7 +39,6 @@ import "./theme/theme.css";
 
 setupIonicReact();
 
-// these methods should go inside a file name.. utilitys.ts
 export const currentPath = () => {
   const match = window.location.pathname.match(/^\/[^?#]*/);
   return match ? match[0] : '';

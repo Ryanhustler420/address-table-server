@@ -1,4 +1,4 @@
-const backend = process.env.REACT_APP_SERVER_BACKEND_URL || '';
+const backend = process.env.REACT_APP_SERVER_BACKEND_URL || ''; // proxy
 export const routes = {
   GET_AUTH_CURRENT_USER: `${backend}api/auth/currentuser`,
   POST_AUTH_REMOVE_ADMIN: `${backend}api/auth/remove-admin`,

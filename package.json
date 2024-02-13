@@ -35,7 +35,7 @@
     "@com.xcodeclazz/celebrate": "^0.0.1",
     "@com.xcodeclazz/compile-run-v2": "^0.0.17",
     "@com.xcodeclazz/monolithic-common": "^0.0.22",
-    "@com.xcodeclazz/mq": "^0.0.2",
+    "@com.xcodeclazz/mq": "^0.0.4",
     "@types/amqplib": "^0.10.4",
     "@types/cookie-session": "^2.0.44",
     "@types/cors": "^2.8.13",
