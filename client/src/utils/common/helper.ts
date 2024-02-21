@@ -1,5 +1,7 @@
 import md5 from 'blueimp-md5';
+import AuthState from './auth-state';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { Roles } from '@com.xcodeclazz/monolithic-common/build/constants/users';
 
 export function hash(keyword: string) { return md5(keyword); }
 export function isMongoId(oid: string) { return oid.length === 24 && !isNaN(Number('0x' + oid)) }
@@ -176,7 +178,7 @@ export function randomId(length: number) {
 }
 
 export function sortDocuments(docs: any[]) {
-    docs.sort((a, b) => (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+    docs?.sort((a, b) => (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
     return docs;
 };
 
@@ -185,6 +187,18 @@ export function imageFallback(url: string, final: (final: string) => void) {
     im.onload = function () { final(url); }
     im.onerror = function () { final('assets/icon/icon.png'); }
     im.src = url;
+}
+
+export function isAdmin() { return new AuthState().getUser()?.roles?.includes(Roles.ADMIN); }
+
+export function getEditorTheme() {
+    return localStorage.getItem("CapacitorStorage.darkmode") == 'true' ? `tomorrow_night_bright` : `xcode`;
+}
+
+export function getRandomColorName(): string {
+    const colors = ["danger", "medium", "primary", "secondary", "success"];  
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
 }
 
 export function isValidObjectId(str: string): boolean {

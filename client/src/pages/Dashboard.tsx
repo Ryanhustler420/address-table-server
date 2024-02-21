@@ -2,12 +2,12 @@ import Joi from "joi";
 import _ from "lodash";
 import moment from "moment";
 import Header from "../components/common/Header";
+import { isAdmin } from "../utils/common/helper";
 import AuthState from "../utils/common/auth-state";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RenderAttrs } from "@com.xcodeclazz/address-table-server";
 import { clipboardOutline, closeOutline, openOutline } from "ionicons/icons";
-import { Roles } from "@com.xcodeclazz/monolithic-common/build/constants/users";
 import { deleteRenderDelete, errorToast, getRenders, postRenderCreate } from "../apis";
 import { insertRender, removeRender, saveRenders } from "../redux/reducers/renderState";
 import { RenderPayload_CreateRender, RenderPayloadJoi_CreateRender } from "@com.xcodeclazz/address-table-server/build/payloads/render";
@@ -52,7 +52,6 @@ const Dashboard: React.FC<{}> = (props) => {
 
   useEffect(() => { getRendersList(); }, []);
 
-  const isAdmin = () => authState.getUser()?.roles?.includes(Roles.ADMIN);
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => getRendersList(event);
   const clearForm = () => {
     if (urlRef.current) urlRef.current.value = "";

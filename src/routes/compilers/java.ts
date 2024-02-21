@@ -2,10 +2,12 @@ import _ from "lodash";
 import axios from "axios";
 import { getFreeUrlByTags } from "./helper/methods";
 import express, { Request, Response } from "express";
+import { numberSequenceGenerator } from "../../services/utils";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
 import { CompilersPayloadJoi_Java, CompilersResponse_Java } from "@com.xcodeclazz/compile-run-v2";
 
 const router = express.Router();
+const number = numberSequenceGenerator(2); // NOTE: decide number of compilers services
 
 router.post("/api/compilers/java",
   celebrate({ [Segments.BODY]: CompilersPayloadJoi_Java }),

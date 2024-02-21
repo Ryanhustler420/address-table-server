@@ -36,6 +36,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "address-table-server": "file:..",
     "assert": "^2.1.0",
     "blueimp-md5": "^2.19.0",
     "cordova-plugin-x-toast": "^2.7.3",

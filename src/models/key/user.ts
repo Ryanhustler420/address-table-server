@@ -1,11 +1,41 @@
 import mongoose from "mongoose";
+import {
+  Roles,
+  Genders,
+  UserAttrs,
+  ITopicStatus,
+  ISubscribeCourse,
+  IQuestionSolvedStatus,
+} from "@com.xcodeclazz/monolithic-common";
 import { Password } from "../../services/password";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
-import { Genders, Roles, UserAttrs } from "@com.xcodeclazz/monolithic-common";
 
 export interface UserMongoDocument extends mongoose.Document, UserAttrs {
   version: number;
   isBanned(): Promise<boolean>;
+  findCourseStatusById(course: mongoose.Types.ObjectId): {
+    item: ISubscribeCourse;
+    pos: number;
+  };
+  getScoreAndSolvedSumOfAllTopics(course: mongoose.Types.ObjectId): {
+    t_score: number;
+    t_solved: number;
+  };
+  findTopicStatusById(
+    course: mongoose.Types.ObjectId,
+    topic: mongoose.Types.ObjectId
+  ): {
+    item: ITopicStatus;
+    pos: number;
+  };
+  findQuestionStatusById(
+    course: mongoose.Types.ObjectId,
+    topic: mongoose.Types.ObjectId,
+    question: mongoose.Types.ObjectId
+  ): {
+    item: IQuestionSolvedStatus;
+    pos: number;
+  };
 }
 
 interface UserModel extends mongoose.Model<UserMongoDocument> {
@@ -73,6 +103,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    activeCourse: mongoose.Schema.Types.Mixed,
+    coursesSubscribed: [mongoose.Schema.Types.Mixed],
   },
   {
     toJSON: {
@@ -96,14 +128,6 @@ userSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   });
 };
 
-userSchema.pre("save", async function (done) {
-  if (this.isModified("password")) {
-    const hashed = await Password.toHash(this.get("password"));
-    this.set("password", hashed);
-  }
-  done();
-});
-
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User<UserAttrs>(attrs);
 };
@@ -111,6 +135,71 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 userSchema.methods.isBanned = async function () {
   return this.is_banned;
 };
+
+userSchema.methods.findCourseStatusById = function (
+  course: mongoose.Types.ObjectId
+) {
+  let item = undefined;
+  let pos = this?.coursesSubscribed.findIndex((e: ISubscribeCourse) =>
+    e.course?.equals(course)
+  );
+  if (pos != -1) item = this?.coursesSubscribed?.at(pos);
+  return { item, pos };
+};
+
+userSchema.methods.getScoreAndSolvedSumOfAllTopics = function (
+  course: mongoose.Types.ObjectId
+) {
+  const found = this.findCourseStatusById(course);
+  if (found.item) {
+    return found.item.topics.reduce((prev: any, curr: ITopicStatus) => {
+      prev.t_solved += curr.solved.length;
+      prev.t_score += curr.score.value;
+      return prev;
+    }, { t_score: 0, t_solved: 0 });
+  } else return { t_score: 0, t_solved: 0 };
+};
+
+userSchema.methods.findTopicStatusById = function (
+  course: mongoose.Types.ObjectId,
+  topic: mongoose.Types.ObjectId
+) {
+  let pos = -1;
+  let item = undefined;
+  const found = this.findCourseStatusById(course);
+  if (found.item) {
+    pos = found.item.topics.findIndex((e: ITopicStatus) =>
+      e.topic?.equals(topic)
+    );
+    if (pos != -1) item = found.item.topics.at(pos);
+    return { item, pos };
+  } else return { item, pos };
+};
+
+userSchema.methods.findQuestionStatusById = function (
+  course: mongoose.Types.ObjectId,
+  topic: mongoose.Types.ObjectId,
+  question: mongoose.Types.ObjectId
+) {
+  let pos = -1;
+  let item = undefined;
+  const found = this.findTopicStatusById(course, topic);
+  if (found.item) {
+    pos = found.item.solved.findIndex((e: IQuestionSolvedStatus) =>
+      e.question?.equals(question)
+    );
+    if (pos != -1) item = found.item.solved.at(pos);
+    return { item, pos };
+  } else return { item, pos };
+};
+
+userSchema.pre("save", async function (done) {
+  if (this.isModified("password")) {
+    const hashed = await Password.toHash(this.get("password"));
+    this.set("password", hashed);
+  }
+  done();
+});
 
 const User = mongoose.model<UserMongoDocument, UserModel>("User", userSchema);
 export { User };
