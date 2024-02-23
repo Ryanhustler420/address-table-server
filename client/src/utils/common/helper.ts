@@ -218,3 +218,24 @@ export function listenScreenRotation(cb: (position: 'portrait' | 'landscape') =>
 export function unlistenScreenRotation() {
     ScreenOrientation.removeAllListeners();
 }
+
+export function getTimeOfDay(hour: number): string {
+  if (hour >= 5 && hour < 12) {
+    return 'Good Morning';
+  } else if (hour >= 12 && hour < 18) {
+    return 'Good Afternoon';
+  } else {
+    return 'Good Night';
+  }
+};
+
+export function getGreetUserMessage() {
+  const userTime = new Date().toLocaleTimeString(undefined, {
+    timeZone: 'IST',
+    hour12: false,
+    hour: 'numeric',
+  });
+
+  const hour = parseInt(userTime.split(':')[0]);
+  return getTimeOfDay(hour);
+};

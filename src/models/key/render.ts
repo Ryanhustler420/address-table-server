@@ -67,7 +67,7 @@ const renderSchema = new mongoose.Schema(
   }
 );
 
-renderSchema.index({ capacity: 1 });
+// renderSchema.index({ capacity: 1 });
 renderSchema.set("versionKey", "version");
 renderSchema.plugin(updateIfCurrentPlugin);
 
