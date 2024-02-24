@@ -1,38 +1,10 @@
-version: '3.9'
+version: "3.9"
 services:
-  address-table-server-backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-      args:
-        - BACKEND_URL=/
-        - NODE_ENV=production
-        - ADMIN_PASSWORD=something
-        - DATABASE=address-table-server
-        - RABBIT_MQ=amqp://appname:password@localhost:port
-        - MONGO_URI=mongodb://address-table-server-mongodb:27017
+  address-table-server-backend-production:
+    image: yevdokiyaalex/address-table-server-production # PASSWORD REQUIRED
     restart: always
     ports:
       - "8081:8081"
     environment:
       - JWT_KEY=something
       - PORT=8081
-    volumes:
-      - /app/client/node_modules
-      - /app/node_modules
-      - /app/client/build
-      - /app/dist
-      - .:/app
-    depends_on:
-      - address-table-server-mongodb
-
-  address-table-server-mongodb:
-    image: mongo
-    restart: unless-stopped
-    volumes:
-      - address-table-server-mongodb:/data/db/address-table-server
-    ports:
-      - "27011:27017"
-
-volumes:
-  address-table-server-mongodb:

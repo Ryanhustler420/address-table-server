@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   address-table-server-frontend:
     build:
@@ -13,6 +13,8 @@ services:
       - /app/node_modules
       - /app/build
       - ./client:/app
+    networks:
+      - address-table-server-network
     depends_on:
       - address-table-server-backend
 
@@ -24,8 +26,8 @@ services:
         - NODE_ENV=development
         - ADMIN_PASSWORD=something
         - DATABASE=address-table-server
-        - RABBIT_MQ=amqp://appname:password@localhost:port
         - MONGO_URI=mongodb://address-table-server-mongodb:27017
+        - RABBIT_MQ=amqp://stage:12345@xcodeclazz-mq-backend-stage:5672
     restart: always
     ports:
       - "8081:8081"
@@ -36,6 +38,9 @@ services:
       - /app/node_modules
       - /app/dist
       - .:/app
+    networks:
+      - message-queue-network
+      - address-table-server-network
     depends_on:
       - address-table-server-mongodb
 
@@ -46,6 +51,14 @@ services:
       - address-table-server-mongodb:/data/db/address-table-server
     ports:
       - "27011:27017"
+    networks:
+      - address-table-server-network
+
+networks:
+  address-table-server-network:
+    external: true
+  message-queue-network:
+    external: true
 
 volumes:
   address-table-server-mongodb:
