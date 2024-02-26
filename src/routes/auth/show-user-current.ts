@@ -1,9 +1,16 @@
 import express from "express";
-import { currentUser } from "@com.xcodeclazz/monolithic-common";
+import {
+  currentUser,
+  AuthResponse_ShowCurrentUser,
+} from "@com.xcodeclazz/monolithic-common";
+
 const router = express.Router();
 
 router.get("/api/auth/currentuser", currentUser, async (req, res) => {
-  res.send({ currentUser: req.currentUser || null });
+  const response: AuthResponse_ShowCurrentUser = {
+    currentUser: req.currentUser || null,
+  };
+  res.send(response);
 });
 
 export { router as authShowUserCurrentRouter };

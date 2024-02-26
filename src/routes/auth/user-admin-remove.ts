@@ -1,12 +1,16 @@
 import { ADMIN_PASSWORD } from "../../env";
 import { User } from "../../models/key/user";
 import express, { Request, Response } from "express";
+import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
+import { sendToAll } from "../../mq/events/producers/auth/user-role-changed-producer";
 import {
   Roles,
+  newObjectId,
   currentUser,
   requireAuth,
   BadRequestError,
+  AuthResponse_RemoveUserAdmin,
   AuthPayloadJoi_RemoveUserAdmin,
 } from "@com.xcodeclazz/monolithic-common";
 
@@ -42,7 +46,13 @@ router.post(
       await existingUser.save();
     }
 
-    res.status(200).send({ message: "Role has been removed from user" });
+    const response: AuthResponse_RemoveUserAdmin = {
+      message: "Role has been removed from user",
+    };
+
+    await sendToAll(rabbitMqWrapper.conn, { blame: newObjectId(), roles: [0, 69], user: newObjectId() });
+
+    res.status(200).send(response);
   }
 );
 

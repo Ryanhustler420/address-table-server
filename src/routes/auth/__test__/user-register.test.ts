@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../../../app";
 import { User } from "../../../models/key/user";
 import { register } from "../../../test/auth-helper";
+import { rabbitMqWrapper } from "../../../mq/rabbitmq-wrapper";
 import { DUMMY_USER_ATTRS, Roles } from "@com.xcodeclazz/monolithic-common";
 
 const timeout_ms = 5 * 60 * 1000;
@@ -19,7 +20,7 @@ describe("@concurrent", () => {
     "register user #1",
     async () => {
       const custom = { ...payload };
-      custom.email = `test1@example.com`;
+      custom.email = `test1@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -34,7 +35,7 @@ describe("@concurrent", () => {
     "register user #2",
     async () => {
       const custom = { ...payload };
-      custom.email = `test2@example.com`;
+      custom.email = `test2@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -49,7 +50,7 @@ describe("@concurrent", () => {
     "register user #3",
     async () => {
       const custom = { ...payload };
-      custom.email = `test3@example.com`;
+      custom.email = `test3@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -64,7 +65,7 @@ describe("@concurrent", () => {
     "register user #4",
     async () => {
       const custom = { ...payload };
-      custom.email = `test4@example.com`;
+      custom.email = `test4@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -79,7 +80,7 @@ describe("@concurrent", () => {
     "register user #5",
     async () => {
       const custom = { ...payload };
-      custom.email = `test5@example.com`;
+      custom.email = `test5@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -94,7 +95,7 @@ describe("@concurrent", () => {
     "register user #6",
     async () => {
       const custom = { ...payload };
-      custom.email = `test6@example.com`;
+      custom.email = `test6@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -109,7 +110,7 @@ describe("@concurrent", () => {
     "register user #7",
     async () => {
       const custom = { ...payload };
-      custom.email = `test7@example.com`;
+      custom.email = `test7@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -124,7 +125,7 @@ describe("@concurrent", () => {
     "register user #8",
     async () => {
       const custom = { ...payload };
-      custom.email = `test8@example.com`;
+      custom.email = `test8@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -139,7 +140,7 @@ describe("@concurrent", () => {
     "register user #9",
     async () => {
       const custom = { ...payload };
-      custom.email = `test9@example.com`;
+      custom.email = `test9@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -154,7 +155,7 @@ describe("@concurrent", () => {
     "register user #10",
     async () => {
       const custom = { ...payload };
-      custom.email = `test10@example.com`;
+      custom.email = `test10@xcc.com`;
       const response = await request(app)
         .post("/api/auth/register")
         .send(custom)
@@ -170,6 +171,8 @@ describe("@sequence", () => {
   it("return error if data is not provided", async () => {
     const response = await request(app).post("/api/auth/register").expect(400);
     expect(response.body).toHaveProperty("errors");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
 
     const user = await User.findOne({ email });
     expect(user).toEqual(null);
@@ -186,6 +189,8 @@ describe("@sequence", () => {
 
     expect(response.body).toHaveProperty("errors");
     expect(response.body.errors[0].message).toContain("email");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
 
     const user = await User.findOne({ email });
     expect(user).toEqual(null);
@@ -193,6 +198,10 @@ describe("@sequence", () => {
 
   it("can't register if already logged in", async () => {
     const { cookie } = await register();
+
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+
     const response = await request(app)
       .post("/api/auth/register")
       .set("Cookie", cookie)
@@ -219,6 +228,8 @@ describe("@sequence", () => {
     expect(res2.body.errors[0].message).toContain(
       "This email address is already in use"
     );
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 
     const user = await User.findOne({ email });
     expect(user?.id).toEqual(res1.body.id);
@@ -236,6 +247,36 @@ describe("@sequence", () => {
     expect(user?.version).toEqual(0);
   });
 
+  it("can't register if hit the wrong url", async () => {
+    const response = await request(app)
+      .post("/api/auth/register2")
+      .send(payload)
+      .expect(404);
+
+    expect(response.body).toHaveProperty("errors");
+    expect(response.body.errors[0].message).toContain("Not found");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
+
+    const user = await User.findOne({ email });
+    expect(user).toEqual(null);
+  });
+
+  it("can't register if hit the corrent url but wrong method", async () => {
+    const response = await request(app)
+      .get("/api/auth/register2")
+      .send(payload)
+      .expect(404);
+
+    expect(response.body).toHaveProperty("errors");
+    expect(response.body.errors[0].message).toContain("Not found");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
+
+    const user = await User.findOne({ email });
+    expect(user).toEqual(null);
+  });
+
   it("can't register even if hit the correct url but provided extra data", async () => {
     const custom = { ...payload };
     custom.is_banned = true;
@@ -247,6 +288,8 @@ describe("@sequence", () => {
 
     expect(response.body).toHaveProperty("errors");
     expect(response.body.errors[0].message).toContain("is_banned");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
 
     const user = await User.findOne({ email });
     expect(user).toEqual(null);
@@ -265,6 +308,8 @@ describe("@sequence", () => {
 
     expect(response.body).toHaveProperty("errors");
     expect(response.body.errors[0].message).toContain("avatar");
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(0);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(0);
 
     const user = await User.findOne({ email });
     expect(user).toEqual(null);
@@ -278,6 +323,9 @@ describe("@sequence", () => {
 
     expect(response.get("Base64")).toBeDefined();
     expect(response.get("Set-Cookie")).toBeDefined();
+
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 
     const user = await User.findOne({ email });
     expect(user?.name).toEqual(payload.name);

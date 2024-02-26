@@ -1,4 +1,6 @@
 import * as amqp from "amqplib/callback_api";
+import { User } from "../../../../models/key/user";
+import { fromObjectId } from "@com.xcodeclazz/monolithic-common";
 import {
   Subjects,
   ConsumerBase,
@@ -7,7 +9,13 @@ import {
 
 export class UserBannedConsumer extends ConsumerBase<CompilersUserBannedEvent> {
   protected subject: Subjects.COMPILERS.USER_BANNED = Subjects.COMPILERS.USER_BANNED;
-  protected onParsedData(queue: string, message: amqp.ConsumeMessage | null): void {
-    // console.log("appname", queue, message?.content.toString(), data);
+  async onParsedData(queue: string, data: CompilersUserBannedEvent['payload'], message: amqp.ConsumeMessage | null) {
+    const uid = fromObjectId(data.user);
+
+    const user = await User.findById(uid);
+    if (!user) return;
+
+    user.set({ is_banned: true });
+    await user.save();
   }
 }

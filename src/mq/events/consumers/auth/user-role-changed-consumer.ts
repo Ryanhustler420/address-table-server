@@ -1,13 +1,21 @@
 import * as amqp from "amqplib/callback_api";
+import { User } from "../../../../models/key/user";
+import { fromObjectId } from "@com.xcodeclazz/monolithic-common";
 import {
   Subjects,
   ConsumerBase,
-  CompilersUserRoleChanedEvent,
+  CompilersUserRoleChangedEvent,
 } from "@com.xcodeclazz/mq";
 
-export class UserRoleChanedConsumer extends ConsumerBase<CompilersUserRoleChanedEvent> {
+export class UserRoleChangedConsumer extends ConsumerBase<CompilersUserRoleChangedEvent> {
   protected subject: Subjects.COMPILERS.USER_ROLE_CHANGED = Subjects.COMPILERS.USER_ROLE_CHANGED;
-  protected onParsedData(queue: string, message: amqp.ConsumeMessage | null): void {
-    // console.log("appname", queue, message?.content.toString(), data);
+  async onParsedData(queue: string, data: CompilersUserRoleChangedEvent['payload'], message: amqp.ConsumeMessage | null) {
+    const uid = fromObjectId(data.user);
+
+    const existingUser = await User.findById(uid);
+    if (!existingUser) return;
+
+    existingUser.set({ roles: data.roles });
+    await existingUser.save();
   }
 }

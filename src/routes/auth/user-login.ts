@@ -3,13 +3,15 @@ import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
 import { Password } from "../../services/password";
 import express, { Request, Response } from "express";
-import cookieConfig from "../../services/cookie-config";
+import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
+import { sendToAll } from "../../mq/events/producers/auth/user-login-producer";
 import {
   custom_jwt,
   currentUser,
   notRequireAuth,
   BadRequestError,
+  AuthResponse_LoginUser,
   AuthPayloadJoi_LoginUser,
 } from "@com.xcodeclazz/monolithic-common";
 
@@ -54,10 +56,11 @@ router.post(
     // Store it on session object
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
-    res
-      .cookie("Set-Cookie", custom_jwt.encode(userJwt), cookieConfig)
-      .status(200)
-      .send(existingUser);
+
+    await sendToAll(rabbitMqWrapper.conn, { user: existingUser.id });
+
+    const response: AuthResponse_LoginUser = existingUser;
+    res.status(200).send(response);
   }
 );
 

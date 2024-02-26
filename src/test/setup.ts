@@ -1,7 +1,9 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
+import { rabbitMqWrapper } from "../mq/rabbitmq-wrapper";
 import mongoose from "mongoose";
 import axios from "axios";
 
+jest.mock("../mq/rabbitmq-wrapper");
 jest.mock("axios");
 
 let mongo: any;
@@ -16,7 +18,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  mockClear();
+  await mockClear();
   const collections = await mongoose.connection.db.collections();
   for (let collection of collections) {
     await collection.deleteMany();
@@ -28,7 +30,16 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-function mockClear() {
+async function mockClear() {
+  ((await rabbitMqWrapper.conn.createChannel()).assertQueue as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).bindQueue as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).assertExchange as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).publish as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).sendToQueue as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).consume as jest.Mock).mockClear();
+  ((await rabbitMqWrapper.conn.createChannel()).ack as jest.Mock).mockClear();
+  (rabbitMqWrapper.conn.createChannel as jest.Mock).mockClear();
+
   (axios.get as jest.Mock).mockClear();
   (axios.post as jest.Mock).mockClear();
 }

@@ -3,7 +3,7 @@ import { UserBannedConsumer } from './events/consumers/auth/user-banned-consumer
 import { UserLoggedInConsumer } from './events/consumers/auth/user-logged-in-consumer';
 import { UserLoggedOutConsumer } from './events/consumers/auth/user-logged-out-consumer';
 import { UserRegisteredConsumer } from './events/consumers/auth/user-registered-consumer';
-import { UserRoleChanedConsumer } from './events/consumers/auth/user-role-changed-consumer';
+import { UserRoleChangedConsumer } from './events/consumers/auth/user-role-changed-consumer';
 
 class RabbitMqWrapper {
     private _connection: amqp.Connection | null = null;
@@ -23,7 +23,7 @@ class RabbitMqWrapper {
           new UserLoggedInConsumer(this.conn).work_queue().catch(console.error);
           new UserLoggedOutConsumer(this.conn).work_queue().catch(console.error);
           new UserRegisteredConsumer(this.conn).work_queue().catch(console.error);
-          new UserRoleChanedConsumer(this.conn).work_queue().catch(console.error);
+          new UserRoleChangedConsumer(this.conn).work_queue().catch(console.error);
         }
 
         this._connection.on("close", () => {

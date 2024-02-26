@@ -7,7 +7,7 @@ import {
 
 export class UserLoggedInConsumer extends ConsumerBase<CompilersUserLoggedInEvent> {
   protected subject: Subjects.COMPILERS.USER_LOGGED_IN = Subjects.COMPILERS.USER_LOGGED_IN;
-  protected onParsedData(queue: string, message: amqp.ConsumeMessage | null): void {
+  async onParsedData(queue: string, data: CompilersUserLoggedInEvent['payload'], message: amqp.ConsumeMessage | null) {
     // console.log("appname", queue, message?.content.toString(), data);
   }
 }

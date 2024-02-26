@@ -3,14 +3,16 @@ import jwt from "jsonwebtoken";
 import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
 import express, { Request, Response } from "express";
-import cookieConfig from "../../services/cookie-config";
+import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
+import { sendToAll } from "../../mq/events/producers/auth/user-register-producer";
 import {
   Roles,
   custom_jwt,
   currentUser,
   notRequireAuth,
   BadRequestError,
+  AuthResponse_RegisterUser,
   AuthPayloadJoi_RegisterUser,
 } from "@com.xcodeclazz/monolithic-common";
 
@@ -53,8 +55,8 @@ router.post(
       country,
       address,
       password,
-      is_banned: false,
       roles: [Roles.NORMAL],
+      is_banned: false,
     });
     await user.save();
 
@@ -67,10 +69,25 @@ router.post(
     // Store it on session object
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
-    res
-      .cookie("Set-Cookie", custom_jwt.encode(userJwt), cookieConfig)
-      .status(201)
-      .send(user);
+
+    await sendToAll(rabbitMqWrapper.conn, { 
+      is_banned: user.is_banned,
+      address: user.address,
+      country: user.country,
+      avatar: user.avatar,
+      gender: user.gender,
+      roles: user.roles,
+      email: user.email,
+      phone: user.phone,
+      state: user.state,
+      city: user.city,
+      name: user.name,
+      dob: user.dob,
+      user: user.id,
+    });
+
+    const response: AuthResponse_RegisterUser = user;
+    res.status(201).send(response);
   }
 );
 

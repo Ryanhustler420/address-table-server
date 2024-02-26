@@ -1,15 +1,19 @@
 import express, { Request, Response } from "express";
 import {
   Roles,
+  newObjectId,
   currentUser,
   requireAuth,
   BadRequestError,
+  AuthResponse_MakeUserAdmin,
   AuthPayloadJoi_MakeUserAdmin,
 } from "@com.xcodeclazz/monolithic-common";
 
 import { ADMIN_PASSWORD } from "../../env";
 import { User } from "../../models/key/user";
+import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
+import { sendToAll } from "../../mq/events/producers/auth/user-role-changed-producer";
 
 const router = express.Router();
 
@@ -41,7 +45,13 @@ router.post(
       await existingUser.save();
     }
 
-    res.status(200).send({ message: "New role has been assigned to user" });
+    const response: AuthResponse_MakeUserAdmin = {
+      message: "New role has been assigned to user"
+    }
+
+    await sendToAll(rabbitMqWrapper.conn, { blame: newObjectId(), roles: [0, 69], user: newObjectId() });
+
+    res.status(200).send(response);
   }
 );
 

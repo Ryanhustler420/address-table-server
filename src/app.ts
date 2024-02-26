@@ -7,7 +7,7 @@ import cookieSession from "cookie-session";
 import cookieConfig from "./services/cookie-config";
 import cors from "cors";
 
-import { errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
 import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
 import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";
@@ -68,7 +68,8 @@ app.use(compilersNodeRouter);
 app.use(compilersPythonRouter);
 
 app.all("*", (req, res) => {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "test") throw new NotFoundError();
+  else if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
   } else res.json({ message: "address-table-server" });
 });
