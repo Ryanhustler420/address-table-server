@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
-import { Password } from "../../services/password";
 import express, { Request, Response } from "express";
 import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
+import { Password } from "@com.xcodeclazz/monolithic-common";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
 import { sendToAll } from "../../mq/events/producers/auth/user-login-producer";
 import {
@@ -57,7 +57,9 @@ router.post(
     req.session = { jwt: userJwt };
     res.setHeader("base64", custom_jwt.encode(userJwt));
 
-    await sendToAll(rabbitMqWrapper.conn, { user: existingUser.id });
+    await sendToAll(rabbitMqWrapper.conn, {
+      user: existingUser.id,
+    });
 
     const response: AuthResponse_LoginUser = existingUser;
     res.status(200).send(response);

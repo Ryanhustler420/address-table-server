@@ -4,10 +4,10 @@ import express from "express";
 import { json } from "body-parser";
 
 import cookieSession from "cookie-session";
-import cookieConfig from "./services/cookie-config";
+import { NODE_ENV } from "./env";
 import cors from "cors";
 
-import { NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { DependenciesConnections, NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
 import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
 import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";
@@ -37,8 +37,16 @@ const app = express();
 app.use(json());
 app.set("trust proxy", true);
 app.use(cors({ origin: "*", exposedHeaders: ["base64"] }));
-app.use(cookieSession(cookieConfig));
+app.use(
+  cookieSession({
+    signed: false,
+    secure: NODE_ENV !== "test",
+  })
+);
 if (process.env.NODE_ENV === "production") app.use(express.static(path.join(__dirname, "..", "client", "build")));
+
+DependenciesConnections.getInstance().setRabbitMq(false);
+DependenciesConnections.getInstance().setMongoDb(false);
 
 ////////////
 // WARNING: PLEASE DON'T CHANGE THE ROUTE ORDER

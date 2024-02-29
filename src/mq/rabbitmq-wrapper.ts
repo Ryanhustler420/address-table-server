@@ -19,6 +19,7 @@ class RabbitMqWrapper {
         console.log("Connected @", new Date());
 
         if (this.conn) {
+          // todo: send alert, connected
           new UserBannedConsumer(this.conn).work_queue().catch(console.error);
           new UserLoggedInConsumer(this.conn).work_queue().catch(console.error);
           new UserLoggedOutConsumer(this.conn).work_queue().catch(console.error);
@@ -28,12 +29,13 @@ class RabbitMqWrapper {
 
         this._connection.on("close", () => {
             console.error('Connection to RabbitMQ closed. Reconnecting...', new Date());
-            setTimeout(() => this.connect(url), 2000);
+            // todo: send alert
+            setTimeout(() => this.connect(url), 10000);
         });
       } catch (error) {
         // @ts-ignore
         console.error(error?.message, new Date());
-        setTimeout(() => this.connect(url), 2000);
+        setTimeout(() => this.connect(url), 10000);
       }
     }
 }

@@ -1,7 +1,7 @@
-import { Roles, toObjectId } from "@com.xcodeclazz/monolithic-common";
 import { rabbitMqWrapper } from "../../../../rabbitmq-wrapper";
 import { CompilersUserBannedEvent } from "@com.xcodeclazz/mq";
 import { UserBannedConsumer } from "../user-banned-consumer";
+import { Roles, newObjectIdAsString } from "@com.xcodeclazz/monolithic-common";
 import { createUser } from "../../../../../__mocks__/_";
 import { User } from "../../../../../models/key/user";
 import * as amqp from "amqplib/callback_api";
@@ -14,10 +14,9 @@ it("user not found", async () => {
   const message: amqp.ConsumeMessage = {};
 
   const u1 = await createUser([Roles.NORMAL], false);
-  const bogus = toObjectId("64ec67967012ba835ef454e3");
 
   const data: CompilersUserBannedEvent["payload"] = {
-    user: bogus,
+    user: newObjectIdAsString(),
     reason: "user has logged in via another device without logout first",
   };
 

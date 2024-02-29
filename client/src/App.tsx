@@ -72,7 +72,7 @@ const App: React.FC = () => {
     return (
       <IonRouterOutlet id="main-drawer" animated={false}>
         <NonPrivateRoute path={components.login.path} component={components.login.Component} redirect={components.dashboard.path} exact />
-        <NonPrivateRoute path={components.register.path} component={components.register.Component} redirect={components.dashboard.path} exact />
+        {/* <NonPrivateRoute path={components.register.path} component={components.register.Component} redirect={components.dashboard.path} exact /> */}
         <PrivateRoute path={components.dashboard.path} component={components.dashboard.Component} redirect={components.login.path} exact />
 
         {/* Open in both case i.e auth, not-auth */}

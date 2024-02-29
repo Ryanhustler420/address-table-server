@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Password } from "../../services/password";
+import { Password } from "@com.xcodeclazz/monolithic-common";
 import { RenderAttrs } from "@com.xcodeclazz/address-table-server";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 

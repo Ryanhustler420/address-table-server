@@ -6,7 +6,6 @@ import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
 import { sendToAll } from "../../mq/events/producers/auth/user-role-changed-producer";
 import {
   Roles,
-  newObjectId,
   currentUser,
   requireAuth,
   BadRequestError,
@@ -50,7 +49,11 @@ router.post(
       message: "Role has been removed from user",
     };
 
-    await sendToAll(rabbitMqWrapper.conn, { blame: newObjectId(), roles: [0, 69], user: newObjectId() });
+    await sendToAll(rabbitMqWrapper.conn, { 
+      user: existingUser.id,
+      blame: req.currentUser!.id.toString(),
+      roles: existingUser.roles!,
+    });
 
     res.status(200).send(response);
   }

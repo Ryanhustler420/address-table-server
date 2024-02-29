@@ -7,7 +7,7 @@ import {
   ISubscribeCourse,
   IQuestionSolvedStatus,
 } from "@com.xcodeclazz/monolithic-common";
-import { Password } from "../../services/password";
+import { Password } from "@com.xcodeclazz/monolithic-common";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export interface UserMongoDocument extends mongoose.Document, UserAttrs {

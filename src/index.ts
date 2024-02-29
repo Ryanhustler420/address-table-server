@@ -3,7 +3,8 @@ import { spawn } from "child_process";
 import mongoose from "mongoose";
 import socket from "./socket";
 import { app } from "./app";
-import { PORT, DATABASE, MONGO_URI } from "./env";
+import { rabbitMqWrapper } from './mq/rabbitmq-wrapper';
+import { PORT, DATABASE, MONGO_URI, RABBIT_MQ } from "./env";
 
 const server = socket(app);
 app.use(rateLimit({

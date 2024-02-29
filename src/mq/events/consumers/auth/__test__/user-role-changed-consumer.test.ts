@@ -1,4 +1,4 @@
-import { Roles, newObjectId, DUMMY_USER_ATTRS } from "@com.xcodeclazz/monolithic-common";
+import { Roles, DUMMY_USER_ATTRS, newObjectIdAsString } from "@com.xcodeclazz/monolithic-common";
 import { UserRoleChangedConsumer } from "../user-role-changed-consumer";
 import { CompilersUserRoleChangedEvent } from "@com.xcodeclazz/mq";
 import { rabbitMqWrapper } from "../../../../rabbitmq-wrapper";
@@ -14,8 +14,8 @@ it("non existing user", async () => {
   const message: amqp.ConsumeMessage = {};
 
   const data: CompilersUserRoleChangedEvent["payload"] = {
-    user: newObjectId(),
-    blame: newObjectId(),
+    user: newObjectIdAsString(),
+    blame: newObjectIdAsString(),
     roles: [Roles.ADMIN, Roles.NORMAL],
   };
 

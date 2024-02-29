@@ -71,19 +71,21 @@ router.post(
     res.setHeader("base64", custom_jwt.encode(userJwt));
 
     await sendToAll(rabbitMqWrapper.conn, { 
-      is_banned: user.is_banned,
-      address: user.address,
-      country: user.country,
-      avatar: user.avatar,
-      gender: user.gender,
-      roles: user.roles,
-      email: user.email,
+      user: user.id,
+
+      dob: user.dob,
+      name: user.name,
+      city: user.city,
       phone: user.phone,
       state: user.state,
-      city: user.city,
-      name: user.name,
-      dob: user.dob,
-      user: user.id,
+      email: user.email,
+      roles: user.roles,
+      password: password,
+      avatar: user.avatar,
+      gender: user.gender,
+      country: user.country,
+      address: user.address,
+      is_banned: user.is_banned,
     });
 
     const response: AuthResponse_RegisterUser = user;

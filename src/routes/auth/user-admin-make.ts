@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import {
   Roles,
-  newObjectId,
   currentUser,
   requireAuth,
   BadRequestError,
@@ -49,7 +48,11 @@ router.post(
       message: "New role has been assigned to user"
     }
 
-    await sendToAll(rabbitMqWrapper.conn, { blame: newObjectId(), roles: [0, 69], user: newObjectId() });
+    await sendToAll(rabbitMqWrapper.conn, { 
+      user: existingUser.id,
+      blame: req.currentUser!.id.toString(),
+      roles: existingUser.roles!,
+    });
 
     res.status(200).send(response);
   }

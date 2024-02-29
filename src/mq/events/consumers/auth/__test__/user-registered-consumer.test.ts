@@ -1,4 +1,4 @@
-import { newObjectId, DUMMY_USER_ATTRS } from "@com.xcodeclazz/monolithic-common";
+import { DUMMY_USER_ATTRS, newObjectIdAsString } from "@com.xcodeclazz/monolithic-common";
 import { UserRegisteredConsumer } from "../user-registered-consumer";
 import { CompilersUserRegisteredEvent } from "@com.xcodeclazz/mq";
 import { rabbitMqWrapper } from "../../../../rabbitmq-wrapper";
@@ -40,7 +40,7 @@ it("user not found", async () => {
   // @ts-ignore
   const message: amqp.ConsumeMessage = {};
 
-  const uid = newObjectId();
+  const uid = newObjectIdAsString();
 
   const data: CompilersUserRegisteredEvent["payload"] = {
     user: uid,
@@ -54,5 +54,5 @@ it("user not found", async () => {
   expect((await rabbitMqWrapper.conn.createChannel()).consume).toHaveBeenCalledTimes(1);
 
   const user = await User.findOne({ email: "email@fmail.com" });
-  expect(user?.id).toEqual(uid.toString());
+  expect(user?.id).toEqual(uid);
 });

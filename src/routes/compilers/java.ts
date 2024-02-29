@@ -2,8 +2,8 @@ import _ from "lodash";
 import axios from "axios";
 import { getFreeUrlByTags } from "./helper/methods";
 import express, { Request, Response } from "express";
-import { numberSequenceGenerator } from "../../services/utils";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
+import { numberSequenceGenerator } from "@com.xcodeclazz/monolithic-common";
 import { CompilersPayloadJoi_Java, CompilersResponse_Java } from "@com.xcodeclazz/compile-run-v2";
 
 const router = express.Router();
