@@ -1,11 +1,13 @@
 const backend = process.env.REACT_APP_SERVER_BACKEND_URL || ''; // proxy
+const monolithic = process.env.REACT_APP_SERVER_MONOLITHIC_URL || 'http://localhost:8087/';
+
 export const routes = {
-  GET_AUTH_CURRENT_USER: `${backend}api/auth/currentuser`,
-  POST_AUTH_REMOVE_ADMIN: `${backend}api/auth/remove-admin`,
-  POST_AUTH_MAKE_ADMIN: `${backend}api/auth/make-admin`,
-  POST_AUTH_REGISTER: `${backend}api/auth/register`,
-  POST_AUTH_LOGOUT: `${backend}api/auth/logout`,
-  POST_AUTH_LOGIN: `${backend}api/auth/login`,
+  GET_AUTH_CURRENT_USER: `${monolithic}api/auth/currentuser`,
+  POST_AUTH_REMOVE_ADMIN: `${monolithic}api/auth/remove-admin`,
+  POST_AUTH_MAKE_ADMIN: `${monolithic}api/auth/make-admin`,
+  POST_AUTH_REGISTER: `${monolithic}api/auth/register`,
+  POST_AUTH_LOGOUT: `${monolithic}api/auth/logout`,
+  POST_AUTH_LOGIN: `${monolithic}api/auth/login`,
 
   POST_COMPILERS_CPP: `${backend}api/compilers/cpp`,
   POST_COMPILERS_JAVA: `${backend}api/compilers/java`,

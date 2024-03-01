@@ -17,8 +17,8 @@ args.forEach((arg) => {
 const validateArguments = () => {
   if (!namedArgs["--backend"] && !namedArgs["-b"])
     throw new Error("Argument --backend (-b) is required.");
-  // if (!namedArgs["--url"] && !namedArgs["-u"])
-  //   throw new Error("Argument --url (-u) is required.");
+  if (!namedArgs["--monolithic"] && !namedArgs["-m"])
+    throw new Error("Argument --monolithic (-m) is required.");
 };
 
 try {
@@ -27,10 +27,11 @@ try {
 
   // Access named arguments
   const backend = namedArgs["--backend"] || namedArgs["-b"];
-  // const arg2 = namedArgs["--url"] || namedArgs["-u"];
+  const monolithic = namedArgs["--monolithic"] || namedArgs["-m"];
 
   let page = '';
   const values = {
+    REACT_APP_SERVER_MONOLITHIC_URL: monolithic,
     REACT_APP_SERVER_BACKEND_URL: backend,
     REACT_APP_VERSION: "v1",
     EXTRA: 12,

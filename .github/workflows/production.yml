@@ -43,6 +43,7 @@ jobs:
           --build-arg NODE_ENV="production" \
           --build-arg MONGO_URI="${{ secrets.WF_MONGODB_PRODUCTION_URI }}" \
           --build-arg BACKEND_URL="${{ secrets.WF_BACKEND_PRODUCTION_URL }}" \
+          --build-arg MONOLITHIC_URL="${{ secrets.WF_MONOLITHIC_PRODUCTION_URL }}" \
           --build-arg ADMIN_PASSWORD="${{ secrets.WF_ADMIN_PASSWORD_PRODUCTION }}" \
           --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}"
       - name: 🏡 Run production image

@@ -1,6 +1,7 @@
 FROM node:20
 
 ARG BACKEND_URL='/'
+ARG MONOLITHIC_URL='/'
 ARG NODE_ENV=production
 ARG ADMIN_PASSWORD=something
 ARG DATABASE=address-table-server
@@ -36,7 +37,7 @@ RUN npm install
 COPY . .
 
 RUN npm install --prefix client
-RUN node client/inject-env.ts -b=${BACKEND_URL}
+RUN node client/inject-env.ts -b=${BACKEND_URL} --monolithic=${MONOLITHIC_URL}
 RUN npm run build --prefix client
 RUN npm run build
 
