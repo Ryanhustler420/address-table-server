@@ -50,8 +50,8 @@ Create these branches: `master`, `stage`, `production`
 - WF\_<span style="color:green;">**ADMIN_PASSWORD**</span>\_PRODUCTION : `Phpmyadmin920@`
 - WF\_<span style="color:purple;">**BACKEND**</span>\_PRODUCTION_URL : `/`
 - WF\_<span style="color:purple;">**BACKEND**</span>\_STAGE_URL : `/`
-- WF\_<span style="color:orange;">**MONOLITHIC**</span>\_PRODUCTION_URL : `/`
-- WF\_<span style="color:orange;">**MONOLITHIC**</span>\_STAGE_URL : `/`
+- WF\_<span style="color:orange;">**MONOLITHIC**</span>\_PRODUCTION_URL : `https://api.xcodeclazz.com/`
+- WF\_<span style="color:orange;">**MONOLITHIC**</span>\_STAGE_URL : `https://stage.api.xcodeclazz.com/`
 
 > Once you have docker image on dockerhub
 
