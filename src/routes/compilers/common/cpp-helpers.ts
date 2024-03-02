@@ -28,6 +28,7 @@ export async function nativePackageCompiler(data: CompilersPayload_Cpp): Promise
           if (result.executionResult && isNotLinux())
             result.executionResult.stdout =
               result.executionResult.stdout?.replace("\r", "");
+          if (result.executionResult) result.executionResult.exitCode = result.executionResult?.stderr ? 1 : 0;
           var endTime = performance.now();
           var ms = endTime - startTime;
           const response: CompilersResponse_Cpp = {

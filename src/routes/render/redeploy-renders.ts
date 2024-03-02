@@ -7,6 +7,7 @@ import { RenderResponse_RedeployRenders } from "@com.xcodeclazz/address-table-se
 
 const router = express.Router();
 
+// https://api-docs.render.com/reference/create-deploy
 router.post("/api/render/redeploy", async (req, res) => {
   const renders = await Render.find();
   const promises = _.map(renders, async (e) => {

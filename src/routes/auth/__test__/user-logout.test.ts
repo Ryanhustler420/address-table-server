@@ -11,8 +11,8 @@ it("return error if not logged in and try to logout", async () => {
   const response = await request(app).post("/api/auth/logout").expect(401);
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not authorized");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("logouts user even if data provided, wrong or right", async () => {
@@ -28,8 +28,8 @@ it("logouts user even if data provided, wrong or right", async () => {
 
   expect(response.body).toEqual({});
   expect(response.get("Base64")).toEqual("");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(16);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(16);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 });
 
 it("return error if try to logout but broken cookie provided", async () => {
@@ -42,8 +42,8 @@ it("return error if try to logout but broken cookie provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not authorized");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if try to logout with differnt url", async () => {
@@ -55,8 +55,8 @@ it("return error if try to logout with differnt url", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if try to logout with corrent url but wrong method", async () => {
@@ -68,8 +68,8 @@ it("return error if try to logout with corrent url but wrong method", async () =
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("clears the cookie after logout", async () => {
@@ -84,6 +84,6 @@ it("clears the cookie after logout", async () => {
   expect(response.get("Set-Cookie")[0]).toEqual(
     "session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly"
   );
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(16);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(16);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 });

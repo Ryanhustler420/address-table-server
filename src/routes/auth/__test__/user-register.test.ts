@@ -199,8 +199,8 @@ describe("@sequence", () => {
   it("can't register if already logged in", async () => {
     const { cookie } = await register();
 
-    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
     const response = await request(app)
       .post("/api/auth/register")
@@ -228,8 +228,8 @@ describe("@sequence", () => {
     expect(res2.body.errors[0].message).toContain(
       "This email address is already in use"
     );
-    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
     const user = await User.findOne({ email });
     expect(user?.id).toEqual(res1.body.id);
@@ -324,8 +324,8 @@ describe("@sequence", () => {
     expect(response.get("Base64")).toBeDefined();
     expect(response.get("Set-Cookie")).toBeDefined();
 
-    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+    expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+    expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
     const user = await User.findOne({ email });
     expect(user?.name).toEqual(payload.name);

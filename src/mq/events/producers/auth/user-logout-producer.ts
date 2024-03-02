@@ -15,13 +15,9 @@ import {
 export async function sendToAll(c: amqp.Connection, d: CodeUserLoggedOutEvent["payload"]) {
   try {
     new BatchUserLoggedOutProducer(c).send_to_queue(d);
-    new CodeUserLoggedOutProducer(c).send_to_queue(d);
     new LiveUserLoggedOutProducer(c).send_to_queue(d);
-    new NotesUserLoggedOutProducer(c).send_to_queue(d);
     new AdminUserLoggedOutProducer(c).send_to_queue(d);
-    new BrowserUserLoggedOutProducer(c).send_to_queue(d);
     new MonolithicUserLoggedOutProducer(c).send_to_queue(d);
-    new SocketPollingUserLoggedOutProducer(c).send_to_queue(d);
   } catch(error) {
     // @ts-ignore
     console.log(error?.message);

@@ -14,8 +14,8 @@ it("return error if data is not provided", async () => {
     .post("/api/auth/remove-admin")
     .expect(400);
   expect(response.body).toHaveProperty("errors");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if wrong data is provided", async () => {
@@ -29,8 +29,8 @@ it("return error if wrong data is provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("email");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -48,8 +48,8 @@ it("return error if wrong data type is provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain('"code" must be a string');
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -67,8 +67,8 @@ it("return error if not logged in user try to remove admin", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not authorized");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -89,8 +89,8 @@ it("return error if try to remove admin but code provided was wrong", async () =
   expect(response.body.errors[0].message).toContain(
     "You are not allowed to perform this secret operation"
   );
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -111,8 +111,8 @@ it("return error if try to remove admin a non-existing user", async () => {
   expect(response.body.errors[0].message).toContain(
     "Please check email address"
   );
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -133,8 +133,8 @@ it("return error if try to remove admin a existing user but the user is banned",
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("User is banned");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -154,8 +154,8 @@ it("return error if try to remove admin a existing user but broken cookie provid
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not authorized");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -174,8 +174,8 @@ it("return error if try to remove admin a existing user but hit wrong url", asyn
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -194,8 +194,8 @@ it("return error if try to remove admin a existing user with correct url hit but
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -217,8 +217,8 @@ it("return error if try to remove admin a existing user but provided extra data"
   expect(response.body.errors[0].message).toContain(
     '"princess" is not allowed'
   );
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 
   const user = await User.findOne({ email });
   expect(user?.roles).not.toContain(Roles.ADMIN);
@@ -247,8 +247,8 @@ it("response with a message when given valid credentials", async () => {
     .expect(200);
 
   expect(response.body.message).toEqual("Role has been removed from user");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(24);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(24);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(12);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(12);
 
   expect((await User.findOne({ email }))?.roles).not.toContain(Roles.ADMIN);
 });

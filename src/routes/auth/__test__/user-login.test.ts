@@ -13,8 +13,8 @@ it("return error if not provided the data", async () => {
   const { cookie } = await register();
   const response = await request(app).post("/api/auth/login").expect(400);
   expect(response.body).toHaveProperty("errors");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if wrong email syntax provided", async () => {
@@ -28,8 +28,8 @@ it("return error if wrong email syntax provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("email");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if short password provided", async () => {
@@ -43,8 +43,8 @@ it("return error if short password provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain('"email" is required');
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if correct email but short password provided", async () => {
@@ -61,8 +61,8 @@ it("return error if correct email but short password provided", async () => {
   expect(response.body.errors[0].message).toContain(
     '"password" length must be at least 5 characters long'
   );
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if try to login even if already login", async () => {
@@ -78,8 +78,8 @@ it("return error if try to login even if already login", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Please logout first");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if wrong password provided", async () => {
@@ -94,8 +94,8 @@ it("return error if wrong password provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Invalid credentials");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if wrong email provided", async () => {
@@ -110,8 +110,8 @@ it("return error if wrong email provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Invalid credentials");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if try to login but not registered", async () => {
@@ -143,8 +143,8 @@ it("return error if try to login but user is banned", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("You are banned");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("can't login user if cookies provided", async () => {
@@ -160,8 +160,8 @@ it("can't login user if cookies provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Please logout first");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if the url is not correct", async () => {
@@ -177,8 +177,8 @@ it("return error if the url is not correct", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if the url is correct but method is not", async () => {
@@ -194,8 +194,8 @@ it("return error if the url is correct but method is not", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain("Not found");
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("return error if some extra data provided", async () => {
@@ -211,8 +211,8 @@ it("return error if some extra data provided", async () => {
 
   expect(response.body).toHaveProperty("errors");
   expect(response.body.errors[0].message).toContain('"admin" is not allowed');
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(4);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(4);
 });
 
 it("login user which gives response with a cookie when given valid credentials", async () => {
@@ -233,6 +233,6 @@ it("login user which gives response with a cookie when given valid credentials",
 
   expect(response.get("Set-Cookie")).toBeDefined();
   expect(response.get("Base64")).toBeDefined();
-  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(16);
-  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(16);
+  expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
+  expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 });

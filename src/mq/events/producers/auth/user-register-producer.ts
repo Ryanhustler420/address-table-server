@@ -15,13 +15,9 @@ import {
 export async function sendToAll(c: amqp.Connection, d: CodeUserRegisteredEvent["payload"]) {
   try {
     new BatchUserRegisteredProducer(c).send_to_queue(d);
-    new CodeUserRegisteredProducer(c).send_to_queue(d);
     new LiveUserRegisteredProducer(c).send_to_queue(d);
-    new NotesUserRegisteredProducer(c).send_to_queue(d);
     new AdminUserRegisteredProducer(c).send_to_queue(d);
-    new BrowserUserRegisteredProducer(c).send_to_queue(d);
     new MonolithicUserRegisteredProducer(c).send_to_queue(d);
-    new SocketPollingUserRegisteredProducer(c).send_to_queue(d);
   } catch(error) {
     // @ts-ignore
     console.log(error?.message);

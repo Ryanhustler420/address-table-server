@@ -15,13 +15,9 @@ import {
 export async function sendToAll(c: amqp.Connection, d: CodeUserBannedEvent["payload"]) {
   try {
     new BatchUserBannedProducer(c).send_to_queue(d);
-    new CodeUserBannedProducer(c).send_to_queue(d);
     new LiveUserBannedProducer(c).send_to_queue(d);
-    new NotesUserBannedProducer(c).send_to_queue(d);
     new AdminUserBannedProducer(c).send_to_queue(d);
-    new BrowserUserBannedProducer(c).send_to_queue(d);
     new MonolithicUserBannedProducer(c).send_to_queue(d);
-    new SocketPollingUserBannedProducer(c).send_to_queue(d);
   } catch(error) {
     // @ts-ignore
     console.log(error?.message);

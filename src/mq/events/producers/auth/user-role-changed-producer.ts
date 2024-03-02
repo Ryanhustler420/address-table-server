@@ -15,13 +15,9 @@ import {
 export async function sendToAll(c: amqp.Connection, d: CodeUserRoleChangedEvent["payload"]) {
   try {
     new BatchUserRoleChangedProducer(c).send_to_queue(d);
-    new CodeUserRoleChangedProducer(c).send_to_queue(d);
     new LiveUserRoleChangedProducer(c).send_to_queue(d);
-    new NotesUserRoleChangedProducer(c).send_to_queue(d);
     new AdminUserRoleChangedProducer(c).send_to_queue(d);
-    new BrowserUserRoleChangedProducer(c).send_to_queue(d);
     new MonolithicUserRoleChangedProducer(c).send_to_queue(d);
-    new SocketPollingUserRoleChangedProducer(c).send_to_queue(d);
   } catch(error) {
     // @ts-ignore
     console.log(error?.message);

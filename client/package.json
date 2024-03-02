@@ -18,7 +18,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@capacitor/toast": "^5.0.6",
     "@com.xcodeclazz/address-table-server": "^0.0.10",
-    "@com.xcodeclazz/compile-run-v2": "^0.0.17",
+    "@com.xcodeclazz/compile-run-v2": "^0.0.18",
     "@ionic/pwa-elements": "^3.2.2",
     "@ionic/react": "^7.0.0",
     "@ionic/react-router": "^7.0.0",
