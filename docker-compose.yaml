@@ -24,15 +24,15 @@ services:
       dockerfile: Dockerfile
       args:
         - NODE_ENV=development
-        - ADMIN_PASSWORD=something
+        - ADMIN_PASSWORD=SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF
         - DATABASE=address-table-server
         - MONGO_URI=mongodb://address-table-server-mongodb:27017
-        - RABBIT_MQ=amqp://stage:12345@xcodeclazz-mq-backend:5672
+        - RABBIT_MQ=amqp://stage:OzzaE2D1IapNSbp2wue1TPORuNzTWFgK25u0YgRb@xcodeclazz-mq-backend:5672
     restart: always
     ports:
       - "8081:8081"
     environment:
-      - JWT_KEY=something
+      - JWT_KEY=ydO4VUkf5eAJ4aub97zhaD8Vm3pPFOC9TTLt528R
       - PORT=8081
     volumes:
       - /app/node_modules

@@ -8,9 +8,9 @@ jest.mock("axios");
 
 let mongo: any;
 beforeAll(async () => {
-  process.env.JWT_KEY = "secret";
+  process.env.JWT_KEY = "ydO4VUkf5eAJ4aub97zhaD8Vm3pPFOC9TTLt528R";
   process.env.DATABASE = "address-table-server";
-  process.env.ADMIN_PASSWORD = "12345";
+  process.env.ADMIN_PASSWORD = "SW5ziV9wGzq1wxOb8dok5ua2EjzHr5Tgf93GOQcF";
 
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();

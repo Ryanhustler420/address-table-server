@@ -5,6 +5,7 @@ import socket from "./socket";
 import { app } from "./app";
 import { rabbitMqWrapper } from './mq/rabbitmq-wrapper';
 import { PORT, DATABASE, MONGO_URI, RABBIT_MQ } from "./env";
+import { DependenciesConnections } from '@com.xcodeclazz/monolithic-common';
 
 const server = socket(app);
 app.use(rateLimit({
@@ -27,6 +28,7 @@ const start = async () => {
     // @ts-ignore
     console.error(err?.message);
     console.error("====================================");
+    DependenciesConnections.getInstance().setMongoDb(false);
   }
 
   const HOST = "0.0.0.0";

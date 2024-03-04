@@ -7,7 +7,8 @@ import cookieSession from "cookie-session";
 import { NODE_ENV } from "./env";
 import cors from "cors";
 
-import { DependenciesConnections, NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { NotFoundError, errorHandler } from "@com.xcodeclazz/monolithic-common";
+import { dependenciesConnections } from "./middlewares/dependencies-connections";
 import { celebrate_custome_errors } from "@com.xcodeclazz/celebrate";
 
 import { authShowUserCurrentRouter } from "./routes/auth/show-user-current";
@@ -45,8 +46,7 @@ app.use(
 );
 if (process.env.NODE_ENV === "production") app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
-DependenciesConnections.getInstance().setRabbitMq(false);
-DependenciesConnections.getInstance().setMongoDb(false);
+app.use(dependenciesConnections);
 
 ////////////
 // WARNING: PLEASE DON'T CHANGE THE ROUTE ORDER

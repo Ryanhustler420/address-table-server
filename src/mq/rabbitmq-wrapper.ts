@@ -1,4 +1,5 @@
 import * as amqp from 'amqplib';
+import { DependenciesConnections } from '@com.xcodeclazz/monolithic-common';
 import { UserBannedConsumer } from './events/consumers/auth/user-banned-consumer';
 import { UserLoggedInConsumer } from './events/consumers/auth/user-logged-in-consumer';
 import { UserLoggedOutConsumer } from './events/consumers/auth/user-logged-out-consumer';
@@ -28,14 +29,16 @@ class RabbitMqWrapper {
         }
 
         this._connection.on("close", () => {
-            console.error('Connection to RabbitMQ closed. Reconnecting...', new Date());
             // todo: send alert
+            DependenciesConnections.getInstance().setRabbitMq(false);
+            console.error('Connection to RabbitMQ closed. Reconnecting...', new Date());
             setTimeout(() => this.connect(url), 10000);
         });
       } catch (error) {
         // @ts-ignore
         console.error(error?.message, new Date());
         setTimeout(() => this.connect(url), 10000);
+        DependenciesConnections.getInstance().setRabbitMq(false);
       }
     }
 }

@@ -5,7 +5,7 @@ import AuthState from '../utils/common/auth-state';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { RenderPayload_CreateRender, RenderPayload_DeleteRender } from '@com.xcodeclazz/address-table-server';
 import { CompilersPayload_Cpp, CompilersPayload_Java, CompilersPayload_Python, CompilersPayload_Node } from '@com.xcodeclazz/compile-run-v2';
-import { AuthPayload_LoginUser, AuthPayload_MakeUserAdmin, AuthPayload_RegisterUser, AuthPayload_RemoveUserAdmin } from '@com.xcodeclazz/address-table-server';
+import { AuthPayload_LoginUser, AuthPayload_MakeUserAdmin, AuthPayload_RegisterUser, AuthPayload_RemoveUserAdmin } from '@com.xcodeclazz/monolithic-common';
 
 const authState = new AuthState();
 

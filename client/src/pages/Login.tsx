@@ -4,8 +4,7 @@ import { useHistory } from 'react-router';
 import { errorToast, postLogin } from '../apis';
 import Header from '../components/common/Header';
 import AuthState from '../utils/common/auth-state';
-import { AuthResponse_LoginUser } from '@com.xcodeclazz/address-table-server';
-import { AuthPayloadJoi_LoginUser } from '@com.xcodeclazz/address-table-server/build/payloads/auth';
+import { AuthResponse_LoginUser, AuthPayloadJoi_LoginUser } from '@com.xcodeclazz/monolithic-common';
 import { IonButton, IonContent, IonPage, IonLabel, IonInput, IonButtons, IonGrid, IonRow, IonCol, IonThumbnail, IonSpinner } from '@ionic/react';
 
 import "./Login.css";

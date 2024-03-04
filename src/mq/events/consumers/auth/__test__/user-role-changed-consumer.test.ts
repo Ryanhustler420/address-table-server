@@ -45,7 +45,7 @@ it("existing user roles updated", async () => {
 
   const ex = await User.findById(data.user);
   expect(ex?.roles?.length).toEqual(2);
-  expect(ex?.roles).toContain(69);
+  expect(ex?.roles).toContain(Roles.ADMIN);
   expect(ex?.roles).toContain(0);
   expect(ex?.id).toEqual(data.user);
 });
