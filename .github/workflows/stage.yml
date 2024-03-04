@@ -2,20 +2,21 @@ name: Stage
 env: { CONTAINER_PORT: 8081, STAGE_PORT: 9091 }
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [stage]
-    types: [closed]
+  push:
+  # pull_request:
+  #   branches: [stage]
+  #   types: [closed]
 jobs:
-  merge_check:
-    runs-on: ubuntu-latest
-    outputs:
-      merged: ${{ github.event.pull_request.merged }}
-    steps:
-      - name: Check Pull Request Merge
-        run: echo "Ran the code"
+  # merge_check:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     merged: ${{ github.event.pull_request.merged }}
+  #   steps:
+  #     - name: Check Pull Request Merge
+  #       run: echo "Ran the code"
   server-test:
-    needs: merge_check
-    if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
+    # needs: merge_check
+    # if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Get the code

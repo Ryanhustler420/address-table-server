@@ -2,7 +2,7 @@ name: CI
 env: { STAGE_PORT: 9091, CONTAINER_PORT: 8081 }
 on:
   workflow_dispatch:
-  push:
+  # push:
 jobs:
   server-test:
     runs-on: ubuntu-latest
