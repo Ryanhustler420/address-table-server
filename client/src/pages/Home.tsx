@@ -25,7 +25,7 @@ const Home: React.FC<{}> = (props) => {
         <ul>
           {_.map(renders?.state, (el, idx) => (
             <li key={idx}>
-              {el?._id} - {el.count}
+              {el?.id} - {el.count}
             </li>
           ))}
         </ul>
