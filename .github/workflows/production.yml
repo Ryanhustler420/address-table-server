@@ -47,9 +47,11 @@ jobs:
           --build-arg ADMIN_PASSWORD="${{ secrets.WF_ADMIN_PASSWORD_PRODUCTION }}" \
           --build-arg DATABASE="${{ secrets.WF_MONGODB_PRODUCTION_DATABASE_NAME }}"
       - name: 🏡 Run production image
-        run: docker run -d -p ${{ env.PRODUCTION_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}
+        run: docker run -d --name=production -p ${{ env.PRODUCTION_PORT }}:${{ env.CONTAINER_PORT }} ${{ secrets.WF_DOCKER_PRODUCTION_IMAGE_NAME }}
       - name: 💤 Sleep for 30 seconds
         run: sleep 30
+      - name: 📝 Production Container Logs
+        run: docker logs production
       - name: 📞 Calling production api
         run: curl http://localhost:${{ env.PRODUCTION_PORT }}/api/currentuser
       - name: 1️⃣ Docker production account login
