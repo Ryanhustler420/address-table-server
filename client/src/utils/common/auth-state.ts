@@ -1,4 +1,4 @@
-import { UserAttrs } from '@com.xcodeclazz/monolithic-common';
+import { UserAttrs } from '@com.xcodeclazz/monolithic-common/build/models/user';
 import _ from 'lodash';
 
 export default class AuthState {

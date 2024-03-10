@@ -7,7 +7,7 @@ import Header from '../components/common/Header';
 import AuthState from '../utils/common/auth-state';
 import { errorToast, postRegisterUser } from '../apis';
 import BirthdayDateTimePicker from '../components/BirthdayDateTimePicker';
-import { AuthResponse_RegisterUser } from '@com.xcodeclazz/monolithic-common';
+import { AuthResponse_RegisterUser } from '@com.xcodeclazz/monolithic-common/build/responses/auth';
 import { Genders } from "@com.xcodeclazz/monolithic-common/build/constants/users";
 import { AuthPayloadJoi_RegisterUser, AuthPayload_RegisterUser } from "@com.xcodeclazz/monolithic-common/build/payloads/auth";
 import { IonButtons, IonContent, IonPage, IonLabel, IonInput, IonButton, IonSelect, IonSelectOption, IonThumbnail, IonGrid, IonCol, IonRow, IonCheckbox, IonSpinner } from '@ionic/react';

@@ -15,9 +15,17 @@ router.get("/api/common/metrics", async (req, res) => {
   }
 });
 
+const registry = new prometheus.Registry();
+const counter = new prometheus.Counter({
+  name: 'example_counter',
+  help: 'A simple example counter metric',
+  registers: [registry],
+});
+
 router.get("/api/common/metrics/app", async (req, res) => {
-  res.set("Content-Type", prometheus.register.contentType);
-  res.end(await prometheus.register.metrics());
+  counter.inc();
+  res.set("Content-Type", registry.contentType);
+  res.end(await registry.metrics());
 });
 
 export { router as commonMetricsRouter };
