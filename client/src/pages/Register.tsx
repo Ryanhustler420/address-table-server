@@ -7,7 +7,6 @@ import Header from '../components/common/Header';
 import AuthState from '../utils/common/auth-state';
 import { errorToast, postRegisterUser } from '../apis';
 import BirthdayDateTimePicker from '../components/BirthdayDateTimePicker';
-import { AuthResponse_RegisterUser } from '@com.xcodeclazz/monolithic-common/build/responses/auth';
 import { Genders } from "@com.xcodeclazz/monolithic-common/build/constants/users";
 import { AuthPayloadJoi_RegisterUser, AuthPayload_RegisterUser } from "@com.xcodeclazz/monolithic-common/build/payloads/auth";
 import { IonButtons, IonContent, IonPage, IonLabel, IonInput, IonButton, IonSelect, IonSelectOption, IonThumbnail, IonGrid, IonCol, IonRow, IonCheckbox, IonSpinner } from '@ionic/react';
@@ -58,7 +57,7 @@ const Register: React.FC<{}> = props => {
             setLoading(true);
             postRegisterUser(value, res => {
                 authState.saveToken(res.headers['base64']);
-                authState.saveUser(res?.data as AuthResponse_RegisterUser);
+                authState.saveUser(res?.data?.user);
                 history.replace("/");
             }, error => {
                 errorToast(error);

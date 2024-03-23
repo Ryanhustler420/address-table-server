@@ -4,7 +4,6 @@ import { useHistory } from 'react-router';
 import { errorToast, postLogin } from '../apis';
 import Header from '../components/common/Header';
 import AuthState from '../utils/common/auth-state';
-import { AuthResponse_LoginUser } from '@com.xcodeclazz/monolithic-common/build/responses/auth';
 import { AuthPayloadJoi_LoginUser } from '@com.xcodeclazz/monolithic-common/build/payloads/auth';
 import { IonButton, IonContent, IonPage, IonLabel, IonInput, IonButtons, IonGrid, IonRow, IonCol, IonThumbnail, IonSpinner } from '@ionic/react';
 
@@ -27,7 +26,7 @@ const Login: React.FC<{}> = props => {
             setLoading(true);
             postLogin(value, res => {
                 authState.saveToken(res.headers['base64']);
-                authState.saveUser(res?.data as AuthResponse_LoginUser);
+                authState.saveUser(res?.data?.user);
                 history.replace('/');
             }, error => {
                 errorToast(error);

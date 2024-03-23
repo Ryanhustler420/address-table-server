@@ -228,8 +228,11 @@ it("login user which gives response with a cookie when given valid credentials",
   const payload = DUMMY_USER_ATTRS(email, password);
   _.unset(payload, "password");
 
-  const all_matched = hasAllKeysWithSameValues(payload, response.body);
+  const all_matched = hasAllKeysWithSameValues(payload, response.body.user);
   expect(all_matched).toEqual(true);
+
+  expect(response.body).toHaveProperty("session");
+  expect(response.body).toHaveProperty("user");
 
   expect(response.get("Set-Cookie")).toBeDefined();
   expect(response.get("Base64")).toBeDefined();

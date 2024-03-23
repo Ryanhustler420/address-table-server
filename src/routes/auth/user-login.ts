@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
-import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
+import { ADMIN_PASSWORD, JWT_KEY } from "../../env";
 import express, { Request, Response } from "express";
+import { encode } from "@com.xcodeclazz/session-controller";
 import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { Password } from "@com.xcodeclazz/monolithic-common";
 import { celebrate, Segments } from "@com.xcodeclazz/celebrate";
@@ -61,7 +62,10 @@ router.post(
       user: existingUser.id,
     });
 
-    const response: AuthResponse_LoginUser = existingUser;
+    const response: AuthResponse_LoginUser = {
+      user: existingUser,
+      session: encode({ email: existingUser.email }, ADMIN_PASSWORD),
+    };
     res.status(200).send(response);
   }
 );

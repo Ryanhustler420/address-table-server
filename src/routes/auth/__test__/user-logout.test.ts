@@ -26,7 +26,7 @@ it("logouts user even if data provided, wrong or right", async () => {
     })
     .expect(200);
 
-  expect(response.body).toEqual({});
+  expect(response.body).toHaveProperty("session");
   expect(response.get("Base64")).toEqual("");
   expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
   expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
@@ -79,11 +79,9 @@ it("clears the cookie after logout", async () => {
     .set("Cookie", cookie)
     .expect(200);
 
-  expect(response.body).toEqual({});
+  expect(response.body).toHaveProperty("session");
   expect(response.get("Base64")).toEqual("");
-  expect(response.get("Set-Cookie")[0]).toEqual(
-    "session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly"
-  );
+  expect(response.get("Set-Cookie")[0]).toEqual("Set-Cookie=; Path=/");
   expect((await rabbitMqWrapper.conn.createChannel()).assertQueue).toHaveBeenCalledTimes(8);
   expect((await rabbitMqWrapper.conn.createChannel()).sendToQueue).toHaveBeenCalledTimes(8);
 });

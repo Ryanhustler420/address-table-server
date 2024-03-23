@@ -1,8 +1,9 @@
 import _ from "lodash";
 import jwt from "jsonwebtoken";
-import { JWT_KEY } from "../../env";
 import { User } from "../../models/key/user";
+import { ADMIN_PASSWORD, JWT_KEY } from "../../env";
 import express, { Request, Response } from "express";
+import { encode } from "@com.xcodeclazz/session-controller";
 import { rabbitMqWrapper } from "../../mq/rabbitmq-wrapper";
 import { Segments, celebrate } from "@com.xcodeclazz/celebrate";
 import { sendToAll } from "../../mq/events/producers/auth/user-register-producer";
@@ -88,7 +89,10 @@ router.post(
       is_banned: user.is_banned,
     });
 
-    const response: AuthResponse_RegisterUser = user;
+    const response: AuthResponse_RegisterUser = {
+      user: user,
+      session: encode({ email: user.email }, ADMIN_PASSWORD),
+    };
     res.status(201).send(response);
   }
 );
